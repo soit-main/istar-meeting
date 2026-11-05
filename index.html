@@ -176,6 +176,51 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--green);b
 .fields label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted);min-width:0}
 .fields label.wide{grid-column:1/-1}
 @media (max-width:420px){.fields{grid-template-columns:1fr}}
+.rtabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:14px}
+.rtab{text-align:left;border:1px solid var(--line);background:var(--paper);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.rtab:hover{border-color:var(--line-strong)}
+.rtab.on{border-color:var(--info);background:color-mix(in srgb,var(--info) 6%,var(--paper));box-shadow:0 0 0 1px var(--info)}
+.rtab .who{display:flex;align-items:center;gap:8px;min-width:0}
+.rtab .who b{color:var(--ink)} .rtab .who small{color:var(--muted);font-size:12px}
+.rtab .cnt{margin-left:auto;font-family:var(--f-mono);font-size:11.5px;color:var(--muted)}
+.rtab .avatar{width:26px;height:26px;font-size:12px}
+.rdots{display:flex;gap:3px}.rdots i{flex:1;height:5px;border-radius:99px;background:var(--c)}
+.rwrap{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px;align-items:start}
+.rlist{background:var(--paper);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.ri{border-top:1px solid var(--line)}
+.ri:first-child{border-top:0}
+.ri.open{background:color-mix(in srgb,var(--info) 5%,var(--paper));box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--info) 45%,transparent)}
+.ri-row{width:100%;text-align:left;border:0;background:transparent;padding:14px 20px;display:grid;grid-template-columns:28px minmax(0,1fr) auto 18px;gap:10px;align-items:center}
+.ri-row:hover{background:var(--sunk)}
+.ri .no{font-family:var(--f-mono);font-size:11.5px;color:var(--muted)}
+.ri-row .t{display:flex;flex-direction:column;gap:2px;min-width:0}
+.ri-row .tt{font-weight:500;color:var(--ink)}
+.ri-row small{font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ri-top{display:flex;align-items:center;gap:10px;padding:16px 20px 10px}
+.ri-top b{color:var(--ink);flex:1;min-width:0}
+.ri-top select{width:auto;border-radius:999px;padding:3px 10px;font-size:12px;font-weight:500}
+.ri-body{padding:0 20px 16px;display:flex;flex-direction:column;gap:12px}
+.ri-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.ri-grid label,.raside label{display:flex;flex-direction:column;gap:4px;font-size:11.5px;color:var(--muted);min-width:0}
+.ri-meta{display:flex;gap:16px;align-items:center;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+.ri-meta label{display:flex;align-items:center;gap:6px}
+.ri-meta input{width:auto}
+.ri-meta .edited{margin-left:auto}
+.chev{border:0;background:transparent;padding:4px;color:var(--muted);display:grid;place-items:center}
+.ri-add{border-top:1px solid var(--line);padding:12px 20px}
+.btn.dashed{border-style:dashed;background:transparent;color:var(--green)}
+.raside{padding:18px;display:flex;flex-direction:column;gap:14px}
+.rsum{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.rsum div{background:var(--sunk);border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:2px}
+.rsum small{font-size:11.5px;color:var(--muted)}
+.rsum b{font-family:var(--f-display);font-size:22px;color:var(--ink);line-height:1.2}
+.rsum b span{font-family:var(--f-body);font-size:12px;color:var(--muted);font-weight:400}
+.rsum b.mono{font-family:var(--f-mono);font-size:17px;font-weight:500}
+.legacy{border:1px dashed var(--line-strong);border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:6px;background:var(--sunk)}
+.legacy p{font-size:11.5px;color:var(--muted)}
+.rnav{display:flex;justify-content:space-between;gap:8px;border-top:1px solid var(--line);padding-top:12px}
+@media (max-width:900px){.rwrap{grid-template-columns:minmax(0,1fr)}.rtabs{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.ri-grid{grid-template-columns:minmax(0,1fr)}}
 
 /* assets */
 .asset-tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
@@ -372,7 +417,7 @@ fieldset.fld legend{padding:0;margin-bottom:4px}
       <section id="reports">
         <div class="sec-head"><div><span class="eyebrow">Progress report</span><h2>담당자별 진행 보고</h2><p class="lede">완료한 범위와 남은 작업, 추가 소요일·완료 예정일·지원 가능한 날짜를 적어 주세요. 입력하면 바로 저장되고 모두의 화면에 반영됩니다.</p></div>
           <div class="actions"><button class="btn" data-act="export-reports" data-dl hidden>보고 CSV 저장</button></div></div>
-        <div class="reports" id="report-list"></div>
+        <div id="report-list"></div>
       </section>
 
       <section id="assets">
@@ -466,8 +511,8 @@ const PREP_C = {'미확인':'var(--muted)','준비 중':'var(--info)','누락 �
 const DECIDE_STATES = ['논의 전','논의 중','결정됨','보류'];
 const DECIDE_C = {'논의 전':'var(--muted)','논의 중':'var(--warn)','결정됨':'var(--ok)','보류':'var(--bad)'};
 const SCHEDULES = [['deadline','마감일'],['milestone','확정일 (오픈·시작)'],['range','기간'],['month','월 단위 (날짜 미정)'],['unscheduled','날짜 미정']];
-const COL_LABEL = {tasks:'업무',assets:'L4K3 작업',reports:'진행 보고',agenda:'회의안',prep:'텀블벅 준비',roadmap:'텀블벅 로드맵',meta:'회의 개요'};
-const COLS = ['meta','tasks','assets','reports','agenda','prep','roadmap'];
+const COL_LABEL = {tasks:'업무',assets:'L4K3 작업',reports:'진행 보고',ritems:'보고 항목',agenda:'회의안',prep:'텀블벅 준비',roadmap:'텀블벅 로드맵',meta:'회의 개요'};
+const COLS = ['meta','tasks','assets','reports','ritems','agenda','prep','roadmap'];
 const NAV = [['overview','회의 개요'],['agenda','오늘 회의안'],['reports','개인별 보고'],['assets','L4K3 제작·분담'],['tumblbug','텀블벅 준비'],['status','업무 현황'],['calendar','전체 캘린더'],['roadmap','담당자 로드맵'],['decide','정할 사항']];
 
 const todayISO = () => new Date(Date.now() + 9*3600e3).toISOString().slice(0,10);
@@ -482,7 +527,7 @@ const byOrder = (a,b) => (a.order ?? 1e9) - (b.order ?? 1e9) || String(a.id).loc
 const pname = id => PEOPLE[id] ? PEOPLE[id].name : (id==='pd' ? '송출 PD' : '');
 
 // ---------- state ----------
-const S = {meta:{}, tasks:[], assets:[], reports:[], agenda:[], prep:[], roadmap:[]};
+const S = {meta:{}, tasks:[], assets:[], reports:[], ritems:[], agenda:[], prep:[], roadmap:[]};
 const loaded = new Set();
 let dbOff = false;
 const E = (col, msg) => dbOff ? '내용을 불러오지 못했어요. 새로고침해 주세요.' : !loaded.has(col) ? '불러오는 중…' : msg;
@@ -540,7 +585,7 @@ document.addEventListener('change', e => { const el=e.target; if (!el.dataset ||
 document.addEventListener('focusout', e => { const el=e.target; if (el.dataset && el.dataset.k && pending[el.dataset.k]) queueField(el, 0); setTimeout(releaseDeferred, 0) });
 
 // sections that hold typed fields: while someone types in one, hold its re-render until they leave it
-const SECTIONS = {assets:['asset-list'], reports:['report-list'], agenda:['agenda-list','decide-list'], prep:['prep-list'], roadmap:['roadmap-list']};
+const SECTIONS = {assets:['asset-list'], reports:['report-list'], ritems:['report-list'], agenda:['agenda-list','decide-list'], prep:['prep-list'], roadmap:['roadmap-list']};
 const deferred = new Set();
 function editingIn(col){
   const a = document.activeElement;
@@ -560,7 +605,7 @@ function flush(){
   if (d.has('meta')) renderMeta();
   if (d.has('tasks')) { renderStats(); renderDues(); renderBrands(); renderCalendar(); renderPeople() }
   if (d.has('assets')) { renderStats(); renderAssets() }
-  if (d.has('reports')) renderReports();
+  if (d.has('reports') || d.has('ritems')) renderReports();
   if (d.has('agenda')) { renderAgenda(); renderDecide() }
   if (d.has('prep')) renderPrep();
   if (d.has('roadmap')) renderRoadmap();
@@ -615,12 +660,38 @@ function renderDecide(){
 }
 
 // ---------- reports ----------
-const RFIELDS = [['progress','완료 범위 / 남은 작업','textarea','제품·페이지별로 작성'],['days','추가 소요일','number','일'],['eta','완료 예정일','date',''],['help','지원이 필요한 작업','text','작업명·필요 역량'],['available','지원 가능한 날짜·시간','text','예: 11.12 오후 2시간'],['notes','기타 보고 / 미결 사항','textarea','인수인계·셀러커넥트 등']];
+const RFIELDS = [['help','지원이 필요한 작업'],['available','지원 가능한 날짜·시간'],['notes','기타 보고 / 미결 사항']];
+const RST = ['진행 전','진행 중','완료','막힘'];
+const RST_C = {'진행 전':'var(--muted)','진행 중':'var(--info)','완료':'var(--ok)','막힘':'var(--bad)'};
+const RDOT_C = {'진행 전':'var(--line-strong)','진행 중':'var(--info)','완료':'var(--ok)','막힘':'var(--bad)'};
+const PORDER = ['hong','cha','lee','noh'];
+const rpOpen = new Set(), rpSeen = new Set();
+const CHEV_UP = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 10l4-4 4 4"/></svg>';
+const CHEV_DN = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg>';
+function curRp(){
+  if (!ui.rp) { try { ui.rp = localStorage.getItem('istar.meeting.rp') || '' } catch {} }
+  if (!PEOPLE[ui.rp]) { const mine = Object.entries(PEOPLE).find(([,p]) => p.name === myId); ui.rp = mine ? mine[0] : 'hong' }
+  return ui.rp;
+}
+function setRp(pid){ ui.rp = pid; try { localStorage.setItem('istar.meeting.rp', pid) } catch {} renderReports() }
+const itemsOf = pid => S.ritems.filter(r => r.pid === pid).sort(byOrder);
+const firstLine = s => String(s||'').split('\n').map(x=>x.trim()).filter(Boolean)[0] || '';
 function renderReports(){
-  const order = ['hong','cha','lee','noh'];
-  const list = [...S.reports].sort((a,b)=>(order.indexOf(a.id)+99)%99-(order.indexOf(b.id)+99)%99);
-  $('report-list').innerHTML = list.length ? list.map(r => { const p = PEOPLE[r.id] || {name:r.name||r.id,role:'',ini:'?',c:'var(--muted)'}; const items = String(r.items||'').split('\n').filter(Boolean);
-    return `<article class="card rp"><div class="ph"><span class="avatar" style="--pc:${p.c}">${esc(p.ini)}</span><h3>${esc(p.name)}<small>${esc(p.role)}</small></h3><button class="btn ghost sp" data-edit data-act="edit" data-col="reports" data-id="${esc(r.id)}">보고 항목 편집</button></div>${items.length?`<ul>${items.map(i=>`<li>${esc(i)}</li>`).join('')}</ul>`:''}<div class="fields">${RFIELDS.map(([f,l,t,ph])=>{ const id=`rp-${r.id}-${f}`, k=`reports|${esc(r.id)}|${f}`; return `<label class="${t==='textarea'?'wide':''}" for="${id}">${l}${t==='textarea'?`<textarea id="${id}" rows="2" data-k="${k}" placeholder="${ph}">${esc(r[f]||'')}</textarea>`:`<input id="${id}" type="${t}" ${t==='number'?'min="0" step="0.5"':''} data-k="${k}" placeholder="${ph}" value="${esc(r[f]||'')}">`}</label>` }).join('')}</div>${editedLine(r)}</article>` }).join('') : `<div class="empty">${E('reports','보고 카드가 아직 없어요.')}</div>`;
+  if (!loaded.has('ritems')) { $('report-list').innerHTML = `<div class="empty">${E('ritems','')}</div>`; return }
+  const pid = curRp(), p = PEOPLE[pid], rep = S.reports.find(r => r.id === pid) || {id: pid};
+  const tabs = PORDER.map(id => { const q = PEOPLE[id], its = itemsOf(id), dn = its.filter(r => r.status === '완료').length;
+    return `<button class="rtab ${id===pid?'on':''}" data-act="rp-tab" data-v="${id}" aria-pressed="${id===pid}"><span class="who"><span class="avatar" style="--pc:${q.c}">${q.ini}</span><b>${q.name}</b><small>${q.role}</small><span class="cnt">${dn}/${its.length}</span></span><span class="rdots">${its.map(r=>`<i style="--c:${RDOT_C[r.status]||RDOT_C['진행 전']}"></i>`).join('') || '<i style="--c:var(--line)"></i>'}</span></button>` }).join('');
+  const items = itemsOf(pid);
+  if (!rpSeen.has(pid)) { rpSeen.add(pid); const first = items.find(r => r.status !== '완료') || items[0]; if (first) rpOpen.add(first.id) }
+  const list = items.map((r, i) => { const no = String(i+1).padStart(2,'0'), st = r.status || '진행 전', k = `ritems|${esc(r.id)}|`;
+    if (rpOpen.has(r.id)) return `<div class="ri open"><div class="ri-top"><span class="no">${no}</span><b>${esc(r.title)}</b><select data-k="${k}status" aria-label="${esc(r.title)} 상태" style="color:${RST_C[st]}">${RST.map(s=>`<option ${st===s?'selected':''}>${s}</option>`).join('')}</select><button class="btn ghost" data-edit data-act="edit" data-col="ritems" data-id="${esc(r.id)}">편집</button><button class="chev" data-act="rp-toggle" data-id="${esc(r.id)}" aria-expanded="true" aria-label="${esc(r.title)} 접기">${CHEV_UP}</button></div><div class="ri-body"><div class="ri-grid"><label for="ri-d-${esc(r.id)}">완료 범위<textarea id="ri-d-${esc(r.id)}" rows="3" data-k="${k}done" placeholder="어디까지 끝났는지">${esc(r.done||'')}</textarea></label><label for="ri-l-${esc(r.id)}">남은 작업<textarea id="ri-l-${esc(r.id)}" rows="3" data-k="${k}left" placeholder="남은 일과 막힌 부분">${esc(r.left||'')}</textarea></label></div><div class="ri-meta"><label for="ri-n-${esc(r.id)}">추가 소요일 <input id="ri-n-${esc(r.id)}" type="number" min="0" step="0.5" data-k="${k}days" value="${esc(r.days||'')}" placeholder="0" style="width:68px"> 일</label><label for="ri-e-${esc(r.id)}">완료 예정일 <input id="ri-e-${esc(r.id)}" type="date" data-k="${k}eta" value="${esc(r.eta||'')}"></label>${editedLine(r)}</div></div></div>`;
+    const sum = r.left ? '남은 작업 · ' + firstLine(r.left) : r.done ? '완료 범위 · ' + firstLine(r.done) : '아직 적지 않았어요';
+    return `<div class="ri"><button class="ri-row" data-act="rp-toggle" data-id="${esc(r.id)}" aria-expanded="false"><span class="no">${no}</span><span class="t"><span class="tt">${esc(r.title)}</span><small>${esc(sum)}${r.eta?' · '+md(r.eta)+' 예정':''}</small></span><span class="pill" style="--c:${RST_C[st]}">${st}</span>${CHEV_DN}</button></div>` }).join('');
+  const dn = items.filter(r => r.status === '완료').length, latest = items.map(r => r.eta).filter(Boolean).sort().pop();
+  const legacy = rep.progress ? `<div class="legacy"><label for="rp-old-${pid}">기존 보고 내용<textarea id="rp-old-${pid}" rows="5" data-k="reports|${pid}|progress">${esc(rep.progress||'')}</textarea></label>${rep.days||rep.eta?`<p>기존 입력 · 추가 소요일 ${esc(rep.days||'—')}일 · 완료 예정일 ${rep.eta?md(rep.eta):'—'}</p>`:''}<p>한 칸에 적었던 내용이에요. 위 업무별 칸으로 옮겨 적은 뒤 지우면 이 상자가 사라져요.</p></div>` : '';
+  const i = PORDER.indexOf(pid), prev = PORDER[(i+3)%4], next = PORDER[(i+1)%4];
+  const aside = `<aside class="card raside"><span class="edited">${p.name} ${p.role} 요약</span><div class="rsum"><div><small>완료</small><b>${dn}<span> / ${items.length}</span></b></div><div><small>가장 늦은 예정일</small><b class="mono">${latest?md(latest):'—'}</b></div></div>${legacy}${RFIELDS.map(([f,l]) => `<label for="rp-${pid}-${f}">${l}${f==='notes'?`<textarea id="rp-${pid}-${f}" rows="3" data-k="reports|${pid}|${f}" placeholder="인수인계 · 일정 충돌 등">${esc(rep[f]||'')}</textarea>`:`<input id="rp-${pid}-${f}" type="text" data-k="reports|${pid}|${f}" placeholder="${f==='help'?'작업명 · 필요 역량':'예: 11.12 오후 2시간'}" value="${esc(rep[f]||'')}">`}</label>`).join('')}${editedLine(rep)}<div class="rnav"><button class="btn" data-act="rp-tab" data-v="${prev}">‹ ${PEOPLE[prev].name}</button><button class="btn primary" data-act="rp-tab" data-v="${next}">${PEOPLE[next].name} ›</button></div></aside>`;
+  $('report-list').innerHTML = `<div class="rtabs">${tabs}</div><div class="rwrap"><div class="rlist">${list || `<div class="empty" style="border:0">${esc(p.name)}님의 보고 항목이 아직 없어요.</div>`}<div class="ri-add" data-edit><button class="btn dashed" data-act="new" data-col="ritems" data-preset='${JSON.stringify({pid, status:'진행 전', done:'', left:'', days:'', eta:''})}'>+ 보고 항목 추가</button></div></div>${aside}</div>`;
 }
 
 // ---------- assets ----------
@@ -748,12 +819,13 @@ const F = {
   prep: () => [{k:'title',l:'준비 항목',t:'text',w:1,req:1},{k:'body',l:'준비할 내용',t:'textarea',w:1,rows:4},{k:'state',l:'상태',t:'select',o:PREP_STATES.map(s=>[s,s])},{k:'memo',l:'메모',t:'text'}],
   roadmap: () => [{k:'period',l:'기간',t:'text',req:1,ph:'예: 11.19–25'},{k:'final',l:'확정 마감 강조',t:'checkbox'},{k:'todo',l:'해야 할 일',t:'textarea',w:1,rows:3},{k:'owner',l:'담당',t:'textarea',w:1,rows:3,help:'줄바꿈으로 구분'},{k:'criteria',l:'완료 기준',t:'textarea',w:1,rows:2},{k:'done',l:'완료',t:'checkbox'}],
   reports: () => [{k:'items',l:'보고 항목',t:'textarea',w:1,rows:6,help:'한 줄에 한 항목'}],
+  ritems: () => [{k:'title',l:'보고 항목',t:'text',w:1,req:1,ph:'예: 베일린 상세페이지 진행 상황'},{k:'status',l:'상태',t:'select',o:RST.map(x=>[x,x])}],
   meta_head: () => [{k:'title',l:'회의 제목',t:'text',w:1,req:1},{k:'dateLabel',l:'날짜 표기',t:'text',w:1,ph:'NOVEMBER 05, 2026 · THURSDAY'},{k:'subtitle',l:'소개 문장',t:'textarea',w:1,rows:2}],
   meta_goal: () => [{k:'goal',l:'확정 목표',t:'textarea',w:1,rows:5,help:'첫 줄은 굵게 표시됩니다'}],
   meta_assets: () => [{k:'assetsNote',l:'제작 리스트 안내',t:'textarea',w:1,rows:6}],
   meta_tumblbug: () => [{k:'tumblbugNote',l:'텀블벅 일정 안내',t:'textarea',w:1,rows:7}],
 };
-const TITLES = {tasks:'업무',assets:'L4K3 작업',agenda:'회의안 항목',prep:'텀블벅 준비 항목',roadmap:'로드맵 단계',reports:'보고 항목',meta:'회의 개요'};
+const TITLES = {tasks:'업무',assets:'L4K3 작업',agenda:'회의안 항목',prep:'텀블벅 준비 항목',roadmap:'로드맵 단계',reports:'보고 항목',ritems:'보고 항목',meta:'회의 개요'};
 let modal = null;
 function closeModal(){ $('modal-root').innerHTML=''; modal=null; if (lastFocus) try{lastFocus.focus()}catch{} }
 let lastFocus = null;
@@ -829,16 +901,18 @@ document.addEventListener('click', e => {
   if (a==='cancel-del') { $('delzone').innerHTML = `<button class="btn danger" type="button" data-act="ask-del">삭제</button>`; return }
   if (a==='do-del') return doDelete();
   if (a==='toggle-task') { const t = find('tasks', el.dataset.id); if (t) write('tasks', t.id, {status: t.status==='done'?'planned':'done'}).catch(()=>{}); return }
+  if (a==='rp-tab') return setRp(el.dataset.v);
+  if (a==='rp-toggle') { const id = el.dataset.id; if (rpOpen.has(id)) rpOpen.delete(id); else rpOpen.add(id); renderReports(); const f = document.getElementById('ri-d-'+id); if (f && rpOpen.has(id)) f.focus({preventScroll:true}); return }
   if (a==='kind') { ui.kind = el.dataset.v; return mark('assets') }
   if (a==='cbrand') { ui.brand = el.dataset.v; return renderCalendar() }
   if (a==='cal-prev' || a==='cal-next') { const [y,m] = ui.month.split('-').map(Number); const d = new Date(Date.UTC(y, m-1 + (a==='cal-next'?1:-1), 1)); ui.month = d.toISOString().slice(0,7); return renderCalendar() }
   if (a==='cal-today') { ui.month = todayISO().slice(0,7); return renderCalendar() }
   if (a==='export-assets') return save(`${todayISO()}_L4K3_제작분담표.csv`, [['ID','구분','작업명','제작 내용','화면·음향','선행 확인','사용 시점','자료 마감','세부 담당','상태','예상 시간','메모','콘티 근거','납품 형태','제작 메모'], ...[...S.assets].sort(byOrder).map(x=>[x.code,KINDS[x.kind],x.title,x.brief,x.screen,x.need,x.cue,x.due,(AOWNERS.find(o=>o[0]===(x.owner||''))||[])[1],x.status,x.hours,x.memo,x.source,x.file,x.extra])]);
-  if (a==='export-reports') return save(`${todayISO()}_담당자별_진행보고.csv`, [['담당자','보고 항목',...RFIELDS.map(f=>f[1])], ...S.reports.map(r=>[(PEOPLE[r.id]?PEOPLE[r.id].name+' '+PEOPLE[r.id].role:r.id), r.items, ...RFIELDS.map(([f])=>r[f]||'')])]);
+  if (a==='export-reports') return save(`${todayISO()}_담당자별_진행보고.csv`, [['담당자','보고 항목','상태','완료 범위','남은 작업','추가 소요일','완료 예정일','지원이 필요한 작업','지원 가능한 날짜·시간','기타 보고'], ...PORDER.flatMap(pid => { const q = PEOPLE[pid], rep = S.reports.find(r=>r.id===pid)||{}; return itemsOf(pid).map(r => [q.name+' '+q.role, r.title, r.status||'진행 전', r.done, r.left, r.days, r.eta, rep.help, rep.available, rep.notes]) })]);
 });
 
 // ---------- empty first frame ----------
-['meta','tasks','assets','reports','agenda','prep','roadmap'].forEach(c=>dirty.add(c)); flush();
+COLS.forEach(c=>dirty.add(c)); flush();
 
 // ---------- connect (Supabase) ----------
 const SB_URL = 'https://pdkdnvjobqhukwpcdntz.supabase.co';
