@@ -534,9 +534,20 @@ function queueField(el, delay=700){
   const key = el.dataset.k; clearTimeout(pending[key]);
   pending[key] = setTimeout(() => { delete pending[key]; const v = el.type==='checkbox' ? el.checked : el.value; write(col,id,{[field]:v}).catch(()=>{}) }, delay);
 }
-document.addEventListener('input', e => { const el=e.target; if (!el.dataset || !el.dataset.k) return; if (el.tagName==='SELECT' || el.type==='checkbox' || el.type==='date') return; queueField(el) });
+document.addEventListener('input', e => { const el=e.target; if (!el.dataset || !el.dataset.k) return; if (el.tagName==='SELECT' || el.type==='checkbox' || el.type==='date') return; if (e.isComposing) return; queueField(el, 900) });
+document.addEventListener('compositionend', e => { const el=e.target; if (el.dataset && el.dataset.k) queueField(el, 900) });
 document.addEventListener('change', e => { const el=e.target; if (!el.dataset || !el.dataset.k) return; queueField(el, 0) });
-document.addEventListener('focusout', e => { const el=e.target; if (el.dataset && el.dataset.k && pending[el.dataset.k]) queueField(el, 0) });
+document.addEventListener('focusout', e => { const el=e.target; if (el.dataset && el.dataset.k && pending[el.dataset.k]) queueField(el, 0); setTimeout(releaseDeferred, 0) });
+
+// sections that hold typed fields: while someone types in one, hold its re-render until they leave it
+const SECTIONS = {assets:['asset-list'], reports:['report-list'], agenda:['agenda-list','decide-list'], prep:['prep-list'], roadmap:['roadmap-list']};
+const deferred = new Set();
+function editingIn(col){
+  const a = document.activeElement;
+  if (!a || !a.dataset || !a.dataset.k || a.tagName==='SELECT' || a.type==='checkbox') return false;
+  return (SECTIONS[col]||[]).some(id => { const r = document.getElementById(id); return r && r.contains(a) });
+}
+function releaseDeferred(){ if (!deferred.size) return; const ready = [...deferred].filter(c => !editingIn(c)); ready.forEach(c => deferred.delete(c)); if (ready.length) mark(...ready) }
 
 // ---------- render orchestration ----------
 const dirty = new Set(); let raf = 0;
@@ -545,6 +556,7 @@ function flush(){
   raf = 0;
   const a = document.activeElement, keep = a && a.dataset && a.dataset.k ? {k:a.dataset.k, v:a.value, c:a.checked, s:a.selectionStart, e:a.selectionEnd} : null;
   const d = new Set(dirty); dirty.clear();
+  for (const c of [...d]) if (editingIn(c)) { d.delete(c); deferred.add(c) }
   if (d.has('meta')) renderMeta();
   if (d.has('tasks')) { renderStats(); renderDues(); renderBrands(); renderCalendar(); renderPeople() }
   if (d.has('assets')) { renderStats(); renderAssets() }
