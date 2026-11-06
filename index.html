@@ -11,7 +11,8 @@
 <style>
 /* Layout: left rail (nav + live status + recent edits) beside a single working column of meeting sections; rail collapses to a sticky scroll bar on phones. */
 :root{
-  --bg:#f3f4ef; --paper:#ffffff; --sunk:#eef1ea; --ink:#1e3a2f; --text:#2a322e; --muted:#6c756e; --line:#e0e5dc; --line-strong:#cfd6cb;
+  --bg:#ffffff; --paper:#ffffff; --sunk:#f5f6f3; --ink:#1e3a2f; --text:#2a322e; --muted:#5f6862; --line:#e4e7e1; --line-strong:#cfd5cc;
+  color-scheme:light;
   --green:#315c49; --green-soft:#e6eee5; --on-green:#ffffff;
   --vaelin:#9b643e; --geum:#456b9d; --l4k3:#83709b;
   --ok:#2f7a52; --warn:#b07a1e; --bad:#b4483c; --info:#4f6b98;
@@ -22,20 +23,6 @@
   --f-mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
   --r:10px;
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#111714; --paper:#18201c; --sunk:#141b18; --ink:#e3ece6; --text:#d3dbd5; --muted:#8e9a92; --line:#27322c; --line-strong:#35423b;
-  --green:#86b9a0; --green-soft:#1f2c26; --on-green:#0f1a15;
-  --vaelin:#d19a72; --geum:#86a8d6; --l4k3:#b5a2cf;
-  --ok:#6fc193; --warn:#dcae5c; --bad:#e3887d; --info:#93aedb;
-  --p-hong:#86b9a0; --p-cha:#c9a27e; --p-lee:#93aedb; --p-noh:#b5a2cf; --p-pd:#8e9a92;
-  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.25); color-scheme:dark}}
-:root[data-theme="dark"]{
-  --bg:#111714; --paper:#18201c; --sunk:#141b18; --ink:#e3ece6; --text:#d3dbd5; --muted:#8e9a92; --line:#27322c; --line-strong:#35423b;
-  --green:#86b9a0; --green-soft:#1f2c26; --on-green:#0f1a15;
-  --vaelin:#d19a72; --geum:#86a8d6; --l4k3:#b5a2cf;
-  --ok:#6fc193; --warn:#dcae5c; --bad:#e3887d; --info:#93aedb;
-  --p-hong:#86b9a0; --p-cha:#c9a27e; --p-lee:#93aedb; --p-noh:#b5a2cf; --p-pd:#8e9a92;
-  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.25); color-scheme:dark}
 
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:72px}
@@ -49,7 +36,7 @@ a{color:var(--green)}
 
 /* shell */
 .shell{display:grid;grid-template-columns:240px minmax(0,1fr);min-height:100%}
-.rail{position:sticky;top:0;height:100vh;overflow-y:auto;border-right:1px solid var(--line);background:var(--paper);padding:22px 18px 24px max(18px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:22px}
+.rail{position:sticky;top:0;height:100vh;overflow-y:auto;border-right:1px solid var(--line);background:#fafbf9;padding:22px 18px 24px max(18px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:22px}
 .brandmark{display:flex;align-items:center;gap:10px}
 .brandmark i{width:30px;height:30px;border-radius:8px;background:var(--green);color:var(--on-green);display:grid;place-items:center;font-style:normal;font-family:var(--f-display);font-weight:700}
 .brandmark b{display:block;font-size:13px;letter-spacing:.08em;color:var(--ink)}
