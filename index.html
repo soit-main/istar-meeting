@@ -165,21 +165,32 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--green);b
 @media (max-width:720px){.hero{grid-template-columns:1fr}.notebox{flex-direction:row;align-items:baseline;gap:10px}.notebox .big{font-size:28px}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
 /* agenda */
-.agenda{display:flex;flex-direction:column;gap:14px}
-.al-head{display:grid;grid-template-columns:28px minmax(0,1fr) 150px 210px 36px;gap:10px;padding:0 0 6px;font-size:11.5px;color:var(--muted);border-bottom:1px solid var(--line)}
-.al{display:grid;grid-template-columns:28px minmax(0,1fr) 150px 210px 36px;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}
-.al .no{font-family:var(--f-mono);font-size:11.5px;color:var(--muted)}
-.al-due{display:flex;align-items:center;gap:8px;min-width:0}
-.al-due input[type=date]{flex:1;min-width:0}
-.al-due input[type=date]:disabled{opacity:.4}
-.al-due .chk{white-space:nowrap}
-.al .x{border:0;background:transparent;color:var(--muted);border-radius:6px;height:30px;font-size:15px}
+.agenda{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;align-items:start}
+.al-list{display:flex;flex-direction:column;gap:2px}
+.al{position:relative;display:grid;grid-template-columns:10px minmax(0,1fr) 26px;gap:2px 8px;align-items:start;padding:7px 0;border-radius:8px}
+.al::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--b,var(--muted));margin-top:11px;justify-self:center}
+.al:focus-within{background:var(--sunk);box-shadow:0 0 0 6px var(--sunk)}
+.al-main{display:flex;flex-direction:column;gap:4px;min-width:0}
+.al .al-text{border:0;background:transparent;padding:3px 4px;margin-left:-4px;font-size:13.5px;line-height:1.5;color:var(--text);border-radius:5px;resize:none;overflow:hidden;min-height:0;field-sizing:content}
+.al .al-text:hover{background:var(--sunk)}
+.al .al-text:focus{background:var(--paper);box-shadow:0 0 0 1px var(--line-strong)}
+.al-meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.al-meta select,.al-meta input[type=date]{width:auto;border:1px solid transparent;border-radius:999px;padding:1px 8px;font-size:12px;line-height:1.6;background:var(--sunk);color:var(--muted)}
+.al-meta select:hover,.al-meta input[type=date]:hover{border-color:var(--line-strong)}
+.al-meta select.has{background:color-mix(in srgb,var(--pc) 14%,var(--paper));color:var(--pc);font-weight:700}
+.al-meta input[type=date]{font-family:var(--f-mono);max-width:150px}
+.al-meta input[type=date].has{background:color-mix(in srgb,var(--warn) 14%,var(--paper));color:var(--warn);font-weight:500}
+.al-meta input[type=date]:disabled{display:none}
+.al-meta .chk{font-size:12px;gap:4px;padding:1px 8px;border-radius:999px}
+.al-meta .chk.on{background:color-mix(in srgb,var(--warn) 14%,var(--paper));color:var(--warn);font-weight:500}
+.al-meta .chk input{width:13px;height:13px}
+.al .x{border:0;background:transparent;color:var(--muted);border-radius:6px;height:26px;width:26px;font-size:13px;padding:0;opacity:0}
+.al:hover .x,.al:focus-within .x,.al .x.armed{opacity:1}
+@media (hover:none){.al .x{opacity:.7}}
 .al .x:hover{color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,transparent)}
-.al .x.armed{color:#fff;background:var(--bad);font-size:11.5px}
-.al-sync{grid-column:2/-1;font-size:11.5px;color:var(--muted);margin-top:-2px}
-.al-add{padding-top:4px}
-.al-empty{padding:12px 0;font-size:13px;color:var(--muted);border-bottom:1px solid var(--line)}
-@media (max-width:760px){.al-head{display:none}.al{grid-template-columns:24px minmax(0,1fr) 36px}.al .own,.al-due{grid-column:2/3}.al .x{grid-column:3;grid-row:1}}
+.al .x.armed{color:#fff;background:var(--bad);font-size:11px;width:auto;padding:0 6px}
+.al-add{padding-top:6px}
+.al-empty{padding:6px 0;font-size:13px;color:var(--muted)}
 .ri-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:2px}
 .tagchip{font-size:11px;padding:1px 7px;border-radius:999px;background:var(--sunk);color:var(--muted);white-space:nowrap}
 .tagchip.dl{background:color-mix(in srgb,var(--warn) 14%,transparent);color:var(--warn);font-family:var(--f-mono)}
@@ -630,8 +641,10 @@ function queueField(el, delay=700){
   pending[key] = setTimeout(() => { delete pending[key]; const v = el.type==='checkbox' ? el.checked : el.value; write(col,id,{[field]:v},'update',mt).catch(()=>{}) }, delay);
 }
 document.addEventListener('input', e => { const el=e.target; if (!el.dataset || !el.dataset.k) return; if (el.tagName==='SELECT' || el.type==='checkbox' || el.type==='date') return; if (e.isComposing) return; queueField(el, 900) });
+document.addEventListener('keydown', e => { const el = e.target; if (!el.classList || !el.classList.contains('al-text') || e.key !== 'Enter' || e.isComposing || e.shiftKey) return; e.preventDefault(); const l = find('alines', el.dataset.k.split('|')[1]); queueField(el, 0); if (l) addLine(l.aid) });
+document.addEventListener('input', e => { const el = e.target; if (el.classList && el.classList.contains('al-text') && !CSS.supports('field-sizing','content')) { el.style.height = 'auto'; el.style.height = el.scrollHeight + 'px' } });
 document.addEventListener('compositionend', e => { const el=e.target; if (el.dataset && el.dataset.k) queueField(el, 900) });
-document.addEventListener('change', e => { const el=e.target; if (!el.dataset || !el.dataset.k) return; if (el.dataset.k.endsWith('|always')) { const d = el.closest('.al-due'); const di = d && d.querySelector('input[type=date]'); if (di) di.disabled = el.checked } queueField(el, 0) });
+document.addEventListener('change', e => { const el=e.target; if (!el.dataset || !el.dataset.k) return; if (el.dataset.k.endsWith('|always')) { const d = el.closest('.al-meta'); const di = d && d.querySelector('input[type=date]'); if (di) di.disabled = el.checked; const lb = el.closest('label'); if (lb) lb.classList.toggle('on', el.checked) } queueField(el, 0) });
 document.addEventListener('focusout', e => { const el=e.target; if (el.dataset && el.dataset.k && pending[el.dataset.k]) queueField(el, 0); setTimeout(releaseDeferred, 0) });
 
 // sections that hold typed fields: while someone types in one, hold its re-render until they leave it
@@ -708,20 +721,23 @@ const linesOf = aid => S.alines.filter(l => l.aid === aid).sort(byOrder);
 const ownersOf = l => !l || !String(l.text||'').trim() ? [] : l.owner === 'all' ? [...PORDER] : PEOPLE[l.owner] ? [l.owner] : [];
 const dueText = x => x.always ? '상시' : x.due ? md(x.due) + '(' + wd(x.due) + ')' : '';
 function lineRow(l, i){
-  const k = `alines|${esc(l.id)}|`, own = ownersOf(l);
-  return `<div class="al"><span class="no">${String(i+1).padStart(2,'0')}</span>
-  <input type="text" id="al-t-${esc(l.id)}" data-k="${k}text" value="${esc(l.text||'')}" placeholder="할 일을 적어 주세요" aria-label="할 일">
-  <select class="own" data-k="${k}owner" aria-label="담당자">${OWN_OPTS.map(([v,n]) => `<option value="${v}" ${(l.owner||'')===v?'selected':''}>${n}</option>`).join('')}</select>
-  <span class="al-due"><input type="date" data-k="${k}due" value="${esc(l.due||'')}" aria-label="데드라인" ${l.always?'disabled':''}><label class="chk"><input type="checkbox" data-k="${k}always" ${l.always?'checked':''}> 상시</label></span>
-  <button class="x" type="button" data-edit data-act="al-del" data-id="${esc(l.id)}" aria-label="이 줄 삭제">✕</button>
-  ${own.length ? `<span class="al-sync">→ ${own.map(pid => PEOPLE[pid].name).join(' · ')} 진행 보고에 등록됨</span>` : ''}</div>`;
+  const k = `alines|${esc(l.id)}|`, o = PEOPLE[l.owner], pc = o ? o.c : l.owner === 'all' ? 'var(--green)' : '';
+  return `<div class="al"><span aria-hidden="true"></span><div class="al-main">
+  <textarea class="al-text" rows="1" id="al-t-${esc(l.id)}" data-k="${k}text" placeholder="할 일을 적어 주세요" aria-label="할 일">${esc(l.text||'')}</textarea>
+  <div class="al-meta">
+    <select class="${pc?'has':''}" style="${pc?`--pc:${pc}`:''}" data-k="${k}owner" aria-label="담당자">${OWN_OPTS.map(([v,n]) => `<option value="${v}" ${(l.owner||'')===v?'selected':''}>${v===''?'담당자 지정':n}</option>`).join('')}</select>
+    <input type="date" class="${l.due&&!l.always?'has':''}" data-k="${k}due" value="${esc(l.due||'')}" aria-label="데드라인" ${l.always?'disabled':''}>
+    <label class="chk ${l.always?'on':''}"><input type="checkbox" data-k="${k}always" ${l.always?'checked':''}> 상시</label>
+  </div></div>
+  <button class="x" type="button" data-edit data-act="al-del" data-id="${esc(l.id)}" aria-label="이 줄 삭제">✕</button></div>`;
 }
 function renderAgenda(){
   const list = S.agenda.filter(a=>a.section!=='decide').sort(byOrder);
   $('agenda-list').innerHTML = list.length ? list.map((a,i) => { const bk = Object.entries(BRANDS).find(([k,b])=>b.name===(a.tag||'').toUpperCase()); const c = bk ? bk[1].c : 'var(--green)'; const ls = linesOf(a.id);
-    return `<article class="card ag" style="--b:${c}"><div class="top"><span class="tag">${String(i+1).padStart(2,'0')}${a.tag?' · '+esc(a.tag):''}</span><button class="btn ghost" data-edit data-act="edit" data-col="agenda" data-id="${esc(a.id)}">안건 편집</button></div><h3>${esc(a.title)}</h3>
-    <div><div class="al-head"><span></span><span>할 일</span><span>담당자</span><span>데드라인</span><span></span></div>${ls.length ? ls.map(lineRow).join('') : '<div class="al-empty">아직 할 일이 없어요.</div>'}<div class="al-add" data-edit><button class="btn dashed" type="button" data-act="al-add" data-id="${esc(a.id)}">+ 할 일 추가</button></div></div>
+    return `<article class="card ag" style="--b:${c}"><div class="top"><span class="tag">${String(i+1).padStart(2,'0')}${a.tag?' · '+esc(a.tag):''}</span><button class="btn ghost" data-edit data-act="edit" data-col="agenda" data-id="${esc(a.id)}">편집</button></div><h3>${esc(a.title)}</h3>
+    <div class="al-list">${ls.length ? ls.map(lineRow).join('') : '<div class="al-empty">아직 할 일이 없어요.</div>'}<div class="al-add" data-edit><button class="btn ghost" type="button" data-act="al-add" data-id="${esc(a.id)}">+ 할 일 추가</button></div></div>
     ${a.body?`<div class="rich note">${rich(a.body)}</div>`:''}${a.note?`<p class="note">${esc(a.note)}</p>`:''}<div class="foot">${editedLine(a)}</div></article>` }).join('') : `<div class="empty">${E('agenda','아직 안건이 없어요. ‘+ 안건 추가’로 첫 안건을 올려 주세요.')}</div>`;
+  if (!CSS.supports('field-sizing','content')) document.querySelectorAll('#agenda-list .al-text').forEach(el => { el.style.height = 'auto'; el.style.height = el.scrollHeight + 'px' });
 }
 async function addLine(aid){
   const ls = linesOf(aid), order = Math.max(0, ...ls.map(l => l.order||0)) + 1;
