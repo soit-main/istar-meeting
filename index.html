@@ -219,7 +219,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--green);b
 .rlist{background:var(--paper);border:1px solid var(--line);border-radius:12px;overflow:hidden}
 .ri{border-top:1px solid var(--line)}
 .ri:first-child{border-top:0}
-.ri.open{background:color-mix(in srgb,var(--info) 5%,var(--paper));box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--info) 45%,transparent)}
+.ri.open{background:#f8f8f8;box-shadow:inset 0 0 0 1.5px #b9c9e6}
 .ri-row{width:100%;text-align:left;border:0;background:transparent;padding:14px 20px;display:grid;grid-template-columns:28px minmax(0,1fr) auto 18px;gap:10px;align-items:center}
 .ri-row:hover{background:var(--sunk)}
 .ri .no{font-family:var(--f-mono);font-size:11.5px;color:var(--muted)}
@@ -403,10 +403,96 @@ fieldset.fld legend{padding:0;margin-bottom:4px}
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:60;background:var(--ink);color:var(--paper);padding:9px 16px;border-radius:999px;font-size:13px;box-shadow:var(--shadow);max-width:calc(100% - 32px)}
 .banner{border:1px solid color-mix(in srgb,var(--warn) 45%,var(--line));background:color-mix(in srgb,var(--warn) 9%,var(--paper));padding:12px 16px;border-radius:var(--r);font-size:13px}
 .foot-note{font-size:12px;color:var(--muted);text-align:center}
+
+/* app bar + view modes */
+.appbar{background:var(--paper);border-bottom:1px solid var(--line)}
+.ab-in{display:flex;align-items:center;gap:12px 16px;flex-wrap:wrap;padding-block:12px;padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px))}
+.ab-logo{width:28px;height:28px;border-radius:7px;background:var(--green);color:var(--on-green);display:grid;place-items:center;font-weight:700;font-family:var(--f-display);flex:none}
+.ab-brand{font-size:13px;letter-spacing:.08em;color:var(--ink)}
+.seg{display:flex;padding:3px;border-radius:10px;background:var(--sunk);gap:2px}
+.seg button{border:0;background:transparent;border-radius:8px;padding:6px 14px;color:var(--muted);font-size:13.5px}
+.seg button.on{background:var(--paper);color:var(--ink);font-weight:700;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.ab-in .mt-sel{width:auto;font-weight:500}
+.ab-right{margin-left:auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.ab-right label{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--muted)}
+.ab-right .me-sel{width:auto;font-weight:500;color:var(--ink)}
+.btn.live-on{background:var(--bad);border-color:var(--bad);color:#fff}
+body[data-mode="mine"] .shell,body[data-mode="meeting"] .shell{grid-template-columns:minmax(0,1fr)}
+body[data-mode="mine"] .rail,body[data-mode="meeting"] .rail,body[data-mode="mine"] .topbar,body[data-mode="meeting"] .topbar{display:none}
+body[data-mode="mine"] .wrap>*:not(#v-mine):not(#banner),body[data-mode="meeting"] .wrap>*:not(#v-meeting):not(#banner){display:none}
+body[data-mode="full"] #v-mine,body[data-mode="full"] #v-meeting{display:none}
+body[data-mode="mine"] .wrap,body[data-mode="meeting"] .wrap{max-width:1360px}
+.v-head{display:flex;align-items:flex-end;gap:12px 24px;flex-wrap:wrap;margin-bottom:18px}
+.v-head>div:first-child{display:flex;flex-direction:column;gap:4px;min-width:0}
+.v-head h1{font-size:clamp(22px,3vw,28px)}
+.v-head .sub{font-size:13px;color:var(--muted)}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}
+.chips span{font-size:12.5px;padding:4px 10px;border-radius:999px;background:color-mix(in srgb,var(--c) 12%,var(--paper));color:var(--c)}
+.two{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:28px;align-items:start}
+.two>*{min-width:0}
+@media (max-width:1000px){.two{grid-template-columns:minmax(0,1fr)}}
+.side{display:flex;flex-direction:column;gap:16px}
+.side .card{padding:18px;display:flex;flex-direction:column;gap:12px}
+.side h2{font-size:15px;font-family:var(--f-body)}
+.side label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted)}
+.soft{background:var(--sunk);border-radius:var(--r);padding:18px;display:flex;flex-direction:column;gap:10px}
+.dl{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px 0;border-top:1px solid var(--line);font-size:13.5px}
+.dl:first-of-type{border-top:0}
+.dl .d{font-family:var(--f-mono);font-weight:500;color:var(--ink)}
+.dl .w{display:block;font-size:12px;color:var(--muted)}
+.dd{font-family:var(--f-mono);font-size:11.5px;font-weight:500;padding:2px 8px;border-radius:999px;background:color-mix(in srgb,var(--c) 13%,var(--paper));color:var(--c);white-space:nowrap}
+.livebox{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px}
+.livebox i{width:8px;height:8px;border-radius:50%;background:var(--ok);flex:none}
+.livebox.on{border-color:color-mix(in srgb,var(--bad) 40%,var(--line));color:var(--ink)}
+.livebox.on i{background:var(--bad);box-shadow:0 0 0 4px color-mix(in srgb,var(--bad) 18%,transparent)}
+.mi-row{width:100%;text-align:left;border:0;background:transparent;padding:14px 20px;display:grid;grid-template-columns:112px minmax(0,1fr) auto 64px 16px;gap:12px;align-items:center}
+.mi-row:hover{background:var(--sunk)}
+.mi-row .t{display:flex;flex-direction:column;gap:2px;min-width:0}
+.mi-row .tt{font-size:14.5px;font-weight:500;color:var(--ink)}
+.mi-row small{font-size:12.5px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mi-row .st{font-size:12px;color:var(--muted);justify-self:end}
+.mi-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:16px 20px 10px}
+.mi-top b{font-size:15.5px;color:var(--ink);flex:1;min-width:0}
+.mi-top select{width:auto;border-radius:999px;padding:3px 10px;font-size:12.5px;font-weight:500}
+.duechip{justify-self:start;font-family:var(--f-mono);font-size:12px;padding:2px 8px;border-radius:999px;background:color-mix(in srgb,var(--c) 13%,var(--paper));color:var(--c);white-space:nowrap}
+.ri-meta{display:flex;gap:16px;align-items:center;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+.ri-meta label{display:flex;align-items:center;gap:6px}
+.ri-meta input{width:auto}
+.ri-meta .edited{margin-left:auto}
+.ri-meta input[type=date]:disabled{opacity:.4}
+@media (max-width:640px){.mi-row{grid-template-columns:minmax(0,1fr) 16px}.mi-row .duechip,.mi-row .tagchip,.mi-row .st{grid-column:1}}
+.pick{display:flex;flex-direction:column;gap:14px;align-items:flex-start;padding:32px;border:1px dashed var(--line-strong);border-radius:var(--r)}
+.pick .row{display:flex;gap:10px;flex-wrap:wrap}
+.pick button{display:flex;align-items:center;gap:8px;border:1px solid var(--line-strong);background:var(--paper);border-radius:999px;padding:6px 14px 6px 6px;font-size:14px}
+.pick button:hover{border-color:var(--green)}
+.viewing{display:flex;align-items:center;gap:10px;font-size:13px;padding:8px 12px;border-radius:999px;background:color-mix(in srgb,var(--info) 10%,var(--paper));color:var(--info);align-self:flex-start;margin-bottom:12px}
+.mp{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:24px}
+.mp button{text-align:left;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.mp button:hover{border-color:var(--line-strong);box-shadow:var(--shadow)}
+.mp .who{display:flex;align-items:center;gap:10px}
+.mp .who b{font-size:15px;color:var(--ink)}
+.mp .who small{color:var(--muted);font-size:12.5px}
+.mp .who .n{margin-left:auto;font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+.mp .nx{display:flex;flex-direction:column;gap:2px;min-width:0}
+.mp .nx small{font-size:11.5px;color:var(--muted)}
+.mp .nx span{font-size:14px;font-weight:500;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media (max-width:900px){.mp{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){.mp{grid-template-columns:minmax(0,1fr)}}
+#v-meeting .mm-left{display:flex;flex-direction:column;gap:40px}
+#v-meeting #agenda .agenda{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 </head>
-<body>
+<body data-mode="mine">
+<header class="appbar" id="appbar">
+  <div class="ab-in">
+    <span class="ab-logo">S</span><b class="ab-brand">SOIT</b>
+    <div class="seg" role="group" aria-label="화면 선택"><button type="button" data-act="mode" data-v="mine">내 화면</button><button type="button" data-act="mode" data-v="meeting">회의 모드</button><button type="button" data-act="mode" data-v="full">전체 보기</button></div>
+    <select class="mt-sel" aria-label="회의 날짜"></select>
+    <button class="btn ghost" type="button" data-act="mt-new">+ 새 회의</button>
+    <div class="ab-right"><label>내 이름 <select class="me-sel" aria-label="내 이름"></select></label><button class="btn primary" type="button" id="live-btn" data-act="live-toggle">회의 시작</button></div>
+  </div>
+</header>
 <div class="topbar" aria-label="섹션 이동">
   <div class="row"><div class="brandmark"><i>S</i><div><b>SOIT</b><small>MARKETING</small></div></div><div style="display:flex;gap:6px;align-items:center"><select class="me-sel" aria-label="내 이름 선택" style="width:auto;padding:3px 6px;font-size:12px"></select><div class="live" id="live-m"><i></i><span>불러오는 중</span></div></div></div>
   <nav id="nav-m"></nav>
@@ -441,6 +527,13 @@ fieldset.fld legend{padding:0;margin-bottom:4px}
         </div>
       </div>
 
+      <section id="v-mine" aria-label="내 화면"></section>
+      <section id="v-meeting" aria-label="회의 모드">
+        <div class="v-head" id="mm-head"></div>
+        <div class="mp" id="mm-people"></div>
+        <div class="two"><div class="mm-left" id="mm-slot"></div><aside class="side"><div class="card"><h2>다가오는 마감</h2><div id="mm-dues"></div><button class="btn ghost" type="button" data-act="mode" data-v="full" style="align-self:flex-start">전체 일정 보기 ›</button></div></aside></div>
+      </section>
+
       <section id="overview">
         <div class="hero">
           <div class="titleblock">
@@ -456,6 +549,7 @@ fieldset.fld legend{padding:0;margin-bottom:4px}
         <div class="dues"><h4>다가오는 마감 · 확정일</h4><ol id="dues"></ol></div>
       </section>
 
+      <span id="ph-agenda" hidden></span>
       <section id="agenda">
         <div class="sec-head"><div><span class="eyebrow">Today / 회의안</span><h2>오늘 회의안</h2><p class="lede">진행 보고 → 잔여 일정 → 지원 분담 순서로 진행합니다.</p></div>
           <div class="actions" data-edit><button class="btn primary" data-act="new" data-col="agenda" data-preset='{"section":"today"}'>+ 안건 추가</button></div></div>
@@ -512,6 +606,7 @@ fieldset.fld legend{padding:0;margin-bottom:4px}
         <div class="people" id="people-list"></div>
       </section>
 
+      <span id="ph-decide" hidden></span>
       <section id="decide">
         <div class="sec-head"><div><span class="eyebrow">Discussion points</span><h2>이번 회의에서 정할 사항</h2><p class="lede">논의한 결과를 바로 적어 두면 회의록이 됩니다.</p></div>
           <div class="actions" data-edit><button class="btn primary" data-act="new" data-col="agenda" data-preset='{"section":"decide","state":"논의 전"}'>+ 논의 사항 추가</button></div></div>
@@ -634,11 +729,11 @@ document.addEventListener('input', e => { const el=e.target; if (!el.dataset || 
 document.addEventListener('keydown', e => { const el = e.target; if (!el.classList || !el.classList.contains('al-text') || e.key !== 'Enter' || e.isComposing || e.shiftKey) return; e.preventDefault(); const l = find('alines', el.dataset.k.split('|')[1]); queueField(el, 0); if (l) addLine(l.aid) });
 document.addEventListener('input', e => { const el = e.target; if (el.classList && el.classList.contains('al-text') && !CSS.supports('field-sizing','content')) { el.style.height = 'auto'; el.style.height = el.scrollHeight + 'px' } });
 document.addEventListener('compositionend', e => { const el=e.target; if (el.dataset && el.dataset.k) queueField(el, 900) });
-document.addEventListener('change', e => { const el=e.target; if (!el.dataset || !el.dataset.k) return; if (el.dataset.k.endsWith('|always')) { const d = el.closest('.al-meta'); const di = d && d.querySelector('input[type=date]'); if (di) di.disabled = el.checked; const lb = el.closest('label'); if (lb) lb.classList.toggle('on', el.checked) } queueField(el, 0) });
+document.addEventListener('change', e => { const el=e.target; if (!el.dataset || !el.dataset.k) return; if (el.dataset.k.endsWith('|always')) { const d = el.closest('.al-meta, .ri-meta'); const di = d && d.querySelector('input[data-k$="|deadline"], input[data-k$="|due"]'); if (di) di.disabled = el.checked; const lb = el.closest('label'); if (lb) lb.classList.toggle('on', el.checked) } queueField(el, 0) });
 document.addEventListener('focusout', e => { const el=e.target; if (el.dataset && el.dataset.k && pending[el.dataset.k]) queueField(el, 0); setTimeout(releaseDeferred, 0) });
 
 // sections that hold typed fields: while someone types in one, hold its re-render until they leave it
-const SECTIONS = {assets:['asset-list'], reports:['report-list'], ritems:['report-list'], agenda:['agenda-list','decide-list'], alines:['agenda-list'], prep:['prep-list'], roadmap:['roadmap-list']};
+const SECTIONS = {assets:['asset-list'], reports:['report-list','v-mine'], ritems:['report-list','v-mine'], meta:['v-mine'], agenda:['agenda-list','decide-list'], alines:['agenda-list'], prep:['prep-list'], roadmap:['roadmap-list']};
 const deferred = new Set();
 function editingIn(col){
   const a = document.activeElement;
@@ -658,7 +753,10 @@ function flush(){
   if (d.has('meta')) renderMeta();
   if (d.has('tasks')) { renderStats(); renderDues(); renderBrands(); renderCalendar(); renderPeople() }
   if (d.has('assets')) { renderStats(); renderAssets() }
-  if (d.has('reports') || d.has('ritems')) renderReports();
+  if (d.has('reports') || d.has('ritems')) { if (mode === 'full') renderReports(); else $('report-list').innerHTML = '' }
+  if (mode === 'mine' && ['ritems','reports','tasks','alines','agenda','meta'].some(c => d.has(c))) renderMine();
+  if (mode === 'meeting' && ['ritems','tasks','alines','meta'].some(c => d.has(c))) renderMeetingView();
+  if (d.has('meta')) renderAppbar();
   if (d.has('agenda') || d.has('alines')) { renderAgenda(); renderDecide() }
   if (d.has('prep')) renderPrep();
   if (d.has('roadmap')) renderRoadmap();
@@ -923,7 +1021,7 @@ const F = {
   prep: () => [{k:'title',l:'준비 항목',t:'text',w:1,req:1},{k:'body',l:'준비할 내용',t:'textarea',w:1,rows:4},{k:'state',l:'상태',t:'select',o:PREP_STATES.map(s=>[s,s])},{k:'memo',l:'메모',t:'text'}],
   roadmap: () => [{k:'period',l:'기간',t:'text',req:1,ph:'예: 11.19–25'},{k:'final',l:'확정 마감 강조',t:'checkbox'},{k:'todo',l:'해야 할 일',t:'textarea',w:1,rows:3},{k:'owner',l:'담당',t:'textarea',w:1,rows:3,help:'줄바꿈으로 구분'},{k:'criteria',l:'완료 기준',t:'textarea',w:1,rows:2},{k:'done',l:'완료',t:'checkbox'}],
   reports: () => [{k:'items',l:'보고 항목',t:'textarea',w:1,rows:6,help:'한 줄에 한 항목'}],
-  ritems: () => [{k:'title',l:'보고 항목',t:'text',w:1,req:1,ph:'예: 베일린 상세페이지 진행 상황'},{k:'status',l:'상태',t:'select',o:RST.map(x=>[x,x])}],
+  ritems: d => [{k:'title',l:'할 일',t:'text',w:1,req:1,ph:'예: 베일린 상세페이지 진행 상황'},{k:'status',l:'상태',t:'select',o:RST.map(x=>[x,x])}, ...(d.lid ? [] : [{k:'deadline',l:'데드라인',t:'date'},{k:'always',l:'상시',t:'checkbox'}])],
   meta_head: () => [{k:'title',l:'회의 제목',t:'text',w:1,req:1},{k:'dateLabel',l:'날짜 표기',t:'text',w:1,ph:'NOVEMBER 05, 2026 · THURSDAY'},{k:'subtitle',l:'소개 문장',t:'textarea',w:1,rows:2}],
   meta_goal: () => [{k:'goal',l:'확정 목표',t:'textarea',w:1,rows:5,help:'첫 줄은 굵게 표시됩니다'}],
   meta_assets: () => [{k:'assetsNote',l:'제작 리스트 안내',t:'textarea',w:1,rows:6}],
@@ -1009,6 +1107,13 @@ document.addEventListener('click', e => {
   if (a==='mt-ask-del') { $('mt-delzone').innerHTML = `<span class="confirm">${meetingLabel(cur)} 회의의 모든 내용이 지워져요. 삭제할까요? <button class="btn danger solid" type="button" data-act="mt-do-del">삭제</button><button class="btn" type="button" data-act="mt-cancel-del">아니요</button></span>`; return }
   if (a==='mt-cancel-del') return renderMeetings();
   if (a==='mt-do-del') return deleteMeeting(cur);
+  if (a==='mode') { ui.viewPid = null; return setMode(el.dataset.v) }
+  if (a==='mt-new') { setMode('full'); setTimeout(() => { $('mbar').scrollIntoView({block:'start'}); $('mt-date').focus() }, 30); return }
+  if (a==='live-toggle') return toggleLive();
+  if (a==='view-pid') { ui.viewPid = el.dataset.v; return setMode('mine') }
+  if (a==='view-me') { ui.viewPid = null; return renderMine() }
+  if (a==='pick-me') return setMe(el.dataset.v);
+  if (a==='mi-toggle') { const id = el.dataset.id; if (rpOpen.has(id)) rpOpen.delete(id); else rpOpen.add(id); renderMine(); const f = document.getElementById('mi-d-'+id); if (f && rpOpen.has(id)) f.focus({preventScroll:true}); return }
   if (a==='al-add') return addLine(el.dataset.id);
   if (a==='al-del') { const l = find('alines', el.dataset.id); if (l && !String(l.text||'').trim()) return deleteLine(l.id); if (el.classList.contains('armed')) return deleteLine(el.dataset.id); el.classList.add('armed'); el.textContent = '삭제'; setTimeout(() => { el.classList.remove('armed'); el.textContent = '✕' }, 2500); return }
   if (a==='rp-tab') return setRp(el.dataset.v);
@@ -1022,6 +1127,98 @@ document.addEventListener('click', e => {
 });
 
 // ---------- empty first frame ----------
+
+
+// ---------- view modes ----------
+let mode = 'mine', modeBeforeLive = null;
+const liveState = {};
+try { const m = localStorage.getItem('istar.meeting.mode'); if (['mine','meeting','full'].includes(m)) mode = m } catch {}
+document.body.dataset.mode = mode;
+const myPid = () => (Object.entries(PEOPLE).find(([, p]) => p.name === myId) || [])[0] || null;
+function onMeChange(){ ui.viewPid = null; rpSeen.clear(); COLS.forEach(c => mark(c)); renderAppbar() }
+function placeShared(){
+  if (mode === 'meeting') { $('mm-slot').append($('agenda'), $('decide')) }
+  else { $('ph-agenda').after($('agenda')); $('ph-decide').after($('decide')) }
+}
+function setMode(m, auto){
+  if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
+  mode = m; document.body.dataset.mode = m;
+  if (!auto) { try { localStorage.setItem('istar.meeting.mode', m) } catch {} }
+  placeShared(); COLS.forEach(c => mark(c)); renderAppbar();
+  window.scrollTo(0, 0);
+}
+function renderAppbar(){
+  document.querySelectorAll('.seg button').forEach(b => { const on = b.dataset.v === mode; b.classList.toggle('on', on); b.setAttribute('aria-pressed', String(on)) });
+  const live = !!(S.meta && S.meta.live), btn = $('live-btn');
+  btn.textContent = live ? '회의 종료' : '회의 시작';
+  btn.classList.toggle('live-on', live);
+  btn.disabled = !cur || readOnly;
+}
+function checkLive(){
+  const m = S.meta || {}, prev = liveState[cur], now = m.live ? (m.liveAt || 1) : 0;
+  liveState[cur] = now;
+  if (now && now !== prev) { if (mode !== 'meeting') { modeBeforeLive = mode; setMode('meeting', true) } if (prev !== undefined) toast(`${m.liveBy || '팀원'}님이 회의를 시작했어요.`) }
+  else if (!now && prev) { if (mode === 'meeting' && modeBeforeLive) setMode(modeBeforeLive, true); modeBeforeLive = null; toast('회의가 끝났어요.') }
+  renderAppbar();
+}
+function toggleLive(){
+  if (!cur) return;
+  const live = !!(S.meta && S.meta.live);
+  write('meta', 'main', live ? {live: false, liveEnd: Date.now()} : {live: true, liveAt: Date.now(), liveBy: myId || ''}).catch(() => {});
+}
+const dDay = d => Math.round((D(d) - D(todayISO())) / 864e5);
+const ddColor = n => n <= 3 ? 'var(--bad)' : n <= 14 ? 'var(--warn)' : 'var(--muted)';
+function teamDues(days){
+  const today = todayISO(), end = days ? addDays(today, days) : '9999-12-31', out = [];
+  S.tasks.forEach(t => { if (t.status !== 'done' && ['deadline','milestone'].includes(t.schedule) && t.due && t.due >= today && t.due <= end) out.push({date: t.due, title: t.short || t.title, who: (t.owners || []).map(pname).join(' · ')}) });
+  S.alines.forEach(l => { const tx = String(l.text || '').trim(); if (l.due && !l.always && tx && l.due >= today && l.due <= end && !out.some(o => o.date === l.due && o.title === tx)) out.push({date: l.due, title: tx, who: l.owner === 'all' ? '전원' : (pname(l.owner) || '담당자 미정')}) });
+  return out.sort((a, b) => a.date.localeCompare(b.date));
+}
+const dueRows = list => list.length ? list.map(x => { const n = dDay(x.date); return `<div class="dl"><span class="d">${md(x.date)}</span><span>${esc(x.title)}<span class="w">${esc(x.who)}</span></span><span class="dd" style="--c:${ddColor(n)}">${n === 0 ? 'D-DAY' : 'D-' + n}</span></div>` }).join('') : '<p class="edited">예정된 마감이 없어요.</p>';
+const itemKey = r => r.status === '완료' ? '4' : r.deadline && !r.always ? '1' + r.deadline : r.always ? '2' : r.eta ? '3' + r.eta : '39';
+function dueChip(r){
+  if (r.always) return '<span class="duechip" style="--c:var(--muted)">상시</span>';
+  if (r.deadline) { const n = dDay(r.deadline); return `<span class="duechip" style="--c:${ddColor(n)}">${md(r.deadline)} · ${n < 0 ? '지남' : n === 0 ? 'D-DAY' : 'D-' + n}</span>` }
+  if (r.eta) return `<span class="duechip" style="--c:var(--info)">${md(r.eta)} 예정</span>`;
+  return '<span class="duechip" style="--c:var(--muted)">마감 없음</span>';
+}
+function renderMine(){
+  const root = $('v-mine');
+  if (!loaded.has('ritems')) { root.innerHTML = `<div class="empty">${E('ritems', '')}</div>`; return }
+  const me = myPid(), pid = ui.viewPid || me;
+  if (!pid) { root.innerHTML = `<div class="pick"><h2>${myId ? esc(myId) + '님은 담당자 목록에 없어요' : '누구의 화면을 볼까요?'}</h2><p class="lede">이름을 고르면 그 사람의 할 일과 보고만 모아서 보여 드려요. 한 번 고르면 이 브라우저에서 계속 기억해요.</p><div class="row">${PORDER.map(id => `<button type="button" data-act="pick-me" data-v="${PEOPLE[id].name}"><span class="avatar" style="--pc:${PEOPLE[id].c}">${PEOPLE[id].ini}</span>${PEOPLE[id].name} ${PEOPLE[id].role}</button>`).join('')}</div></div>`; return }
+  const p = PEOPLE[pid], rep = S.reports.find(r => r.id === pid) || {id: pid};
+  const items = itemsOf(pid).sort((a, b) => itemKey(a).localeCompare(itemKey(b)) || byOrder(a, b));
+  const open = items.filter(r => r.status !== '완료'), today = todayISO(), ym = today.slice(0, 7);
+  const nToday = open.filter(r => r.deadline === today && !r.always).length, nMonth = open.filter(r => (r.deadline || '').slice(0, 7) === ym && !r.always && r.deadline >= today).length;
+  const key = 'mine-' + pid;
+  if (!rpSeen.has(key)) { rpSeen.add(key); if (open[0]) rpOpen.add(open[0].id) }
+  const cnt = s => items.filter(r => (r.status || '진행 전') === s).length;
+  const head = `${pid !== me ? `<div class="viewing">${esc(p.name)} ${esc(p.role)}님 화면을 보고 있어요 ${me ? '<button class="btn ghost" type="button" data-act="view-me">내 화면으로</button>' : ''}</div>` : ''}<div class="v-head"><div><span class="sub">${esc(p.name)} ${esc(p.role)}님의 할 일</span><h1>${nToday || nMonth ? `오늘 마감 ${nToday}건, 이번 달 ${nMonth}건` : `남은 할 일 ${open.length}건`}</h1></div><div class="chips">${RST.map(s => `<span style="--c:${RST_C[s]}">${s} ${cnt(s)}</span>`).join('')}</div></div>`;
+  const rows = items.map(r => { const st = r.status || '진행 전', k = `ritems|${esc(r.id)}|`;
+    const tag = r.lid ? `<span class="tagchip al2">회의안${r.src ? ' · ' + esc(r.src) : ''}</span>` : '';
+    if (rpOpen.has(r.id)) return `<div class="ri open"><div class="mi-top">${dueChip(r)}<b>${esc(r.title)}</b>${tag}<select data-k="${k}status" aria-label="${esc(r.title)} 상태" style="color:${RST_C[st]}">${RST.map(x => `<option ${st === x ? 'selected' : ''}>${x}</option>`).join('')}</select><button class="btn ghost" data-edit data-act="edit" data-col="ritems" data-id="${esc(r.id)}">편집</button><button class="chev" data-act="mi-toggle" data-id="${esc(r.id)}" aria-expanded="true" aria-label="${esc(r.title)} 접기">${CHEV_UP}</button></div>
+      <div class="ri-body"><div class="ri-grid"><label for="mi-d-${esc(r.id)}">완료 범위<textarea id="mi-d-${esc(r.id)}" rows="3" data-k="${k}done" placeholder="어디까지 끝났는지">${esc(r.done || '')}</textarea></label><label for="mi-l-${esc(r.id)}">남은 작업<textarea id="mi-l-${esc(r.id)}" rows="3" data-k="${k}left" placeholder="남은 일과 막힌 부분">${esc(r.left || '')}</textarea></label></div>
+      <div class="ri-meta">${r.lid ? `<span>데드라인 <b>${r.always ? '상시' : r.deadline ? md(r.deadline) : '없음'}</b> · 회의안에서 정해요</span>` : `<label>데드라인 <input type="date" data-k="${k}deadline" value="${esc(r.deadline || '')}" ${r.always ? 'disabled' : ''} aria-label="데드라인"></label><label><input type="checkbox" data-k="${k}always" ${r.always ? 'checked' : ''}> 상시</label>`}<label>추가 소요일 <input type="number" min="0" step="0.5" data-k="${k}days" value="${esc(r.days || '')}" placeholder="0" style="width:64px"> 일</label><label>완료 예정일 <input type="date" data-k="${k}eta" value="${esc(r.eta || '')}" aria-label="완료 예정일"></label>${editedLine(r)}</div></div></div>`;
+    const sum = r.left ? '남은 작업 · ' + firstLine(r.left) : r.done ? '완료 범위 · ' + firstLine(r.done) : '아직 적지 않았어요';
+    return `<div class="ri"><button class="mi-row" type="button" data-act="mi-toggle" data-id="${esc(r.id)}" aria-expanded="false">${dueChip(r)}<span class="t"><span class="tt">${esc(r.title)}</span><small>${esc(sum)}</small></span>${tag || '<span></span>'}<span class="st" style="color:${RST_C[st]}">${st}</span>${CHEV_DN}</button></div>` }).join('');
+  const legacy = rep.progress ? `<div class="legacy"><label for="mi-old-${pid}">기존 보고 내용<textarea id="mi-old-${pid}" rows="4" data-k="reports|${pid}|progress">${esc(rep.progress)}</textarea></label><p>한 칸에 적었던 내용이에요. 할 일별로 옮겨 적은 뒤 지우면 사라져요.</p></div>` : '';
+  const live = !!(S.meta && S.meta.live);
+  const aside = `<aside class="side"><div class="card"><h2>지원 요청</h2><label for="mi-help-${pid}">지원이 필요한 작업<input id="mi-help-${pid}" type="text" data-k="reports|${pid}|help" value="${esc(rep.help || '')}" placeholder="작업명 · 필요 역량"></label><label for="mi-av-${pid}">지원 가능한 날짜·시간<input id="mi-av-${pid}" type="text" data-k="reports|${pid}|available" value="${esc(rep.available || '')}" placeholder="예: 11.12 오후 2시간"></label><label for="mi-no-${pid}">기타 보고 / 미결 사항<textarea id="mi-no-${pid}" rows="2" data-k="reports|${pid}|notes" placeholder="인수인계 · 일정 충돌 등">${esc(rep.notes || '')}</textarea></label>${legacy}</div>
+    <div class="soft"><h2>팀 이번 주 마감</h2>${dueRows(teamDues(7))}<button class="btn ghost" type="button" data-act="mode" data-v="meeting" style="align-self:flex-start">회의 모드에서 전체 보기 ›</button></div>
+    <div class="livebox ${live ? 'on' : ''}"><i></i><span>${live ? `회의 진행 중이에요${S.meta.liveBy ? ' · ' + esc(S.meta.liveBy) + ' 시작' : ''}` : '회의가 시작되면 모두의 화면이 회의 모드로 바뀌어요'}</span>${live ? '<button class="btn" type="button" data-act="mode" data-v="meeting">회의 모드로</button>' : ''}</div></aside>`;
+  root.innerHTML = `${head}<div class="two"><div><div class="rlist">${rows || `<div class="empty" style="border:0">${esc(p.name)}님의 할 일이 아직 없어요.</div>`}<div class="ri-add" data-edit><button class="btn dashed" type="button" data-act="new" data-col="ritems" data-preset='${JSON.stringify({pid, status: '진행 전', done: '', left: '', days: '', eta: ''})}'>+ 할 일 추가</button></div></div></div>${aside}</div>`;
+}
+function renderMeetingView(){
+  const m = S.meta || {}, live = !!m.live;
+  $('mm-head').innerHTML = `<div><span class="sub">${cur ? meetingLabel(cur) : ''}${live ? ' · <b style="color:var(--bad)">회의 진행 중</b>' + (m.liveBy ? ' · ' + esc(m.liveBy) + ' 시작' : '') : ''}</span><h1>${esc(m.title || '마케팅 회의안')}</h1></div>`;
+  $('mm-people').innerHTML = PORDER.map(pid => { const q = PEOPLE[pid], its = itemsOf(pid), op = its.filter(r => r.status !== '완료');
+    const nx = op.filter(r => r.deadline && !r.always).sort((a, b) => a.deadline.localeCompare(b.deadline))[0];
+    const c = s => its.filter(r => (r.status || '진행 전') === s).length;
+    return `<button type="button" data-act="view-pid" data-v="${pid}" aria-label="${q.name} 화면 보기"><span class="who"><span class="avatar" style="--pc:${q.c}">${q.ini}</span><b>${q.name}</b><small>${q.role}</small><span class="n">${its.length}건</span></span><span class="nx"><small>가장 가까운 마감</small><span>${nx ? md(nx.deadline) + ' ' + esc(nx.title) : '정해진 마감 없음'}</span></span><span class="chips" style="margin-left:0">${RST.filter(s => s !== '막힘' || c(s)).map(s => `<span style="--c:${RST_C[s]}">${s} ${c(s)}</span>`).join('')}</span></button>` }).join('');
+  $('mm-dues').innerHTML = dueRows(teamDues(0).slice(0, 10));
+}
+placeShared(); renderAppbar();
 COLS.forEach(c=>dirty.add(c)); flush();
 
 // ---------- meetings ----------
@@ -1059,7 +1256,7 @@ function openMeeting(d){
     unsubs.push(db.collection(c, mt).onSnapshot(snap => {
       if (mt !== cur) return;
       const docs = snap.docs.map(x => ({id:x.id, ...x.data()}));
-      if (c === 'meta') S.meta = docs.find(x => x.id === 'main') || {}; else S[c] = docs;
+      if (c === 'meta') { S.meta = docs.find(x => x.id === 'main') || {}; checkLive() } else S[c] = docs;
       loaded.add(c); mark(c);
     }, () => { setLive('off','연결 실패'); if (!loaded.has(c)) showBanner() }));
   }
@@ -1067,7 +1264,7 @@ function openMeeting(d){
 function retitle(t, d){ const md2 = `${Number(d.slice(5,7))}월 ${Number(d.slice(8,10))}일`; return /^\d{1,2}월\s*\d{1,2}일/.test(t||'') ? t.replace(/^\d{1,2}월\s*\d{1,2}일/, md2) : `${md2} 마케팅 회의안` }
 function carry(col, d, date){
   const x = {...d}; ['updatedAt','updatedBy','createdAt','createdBy'].forEach(k => delete x[k]);
-  if (col === 'meta') { x.title = retitle(x.title, date); x.dateLabel = dateLabelOf(date) }
+  if (col === 'meta') { x.title = retitle(x.title, date); x.dateLabel = dateLabelOf(date); delete x.live; delete x.liveAt; delete x.liveBy }
   if (col === 'agenda' && x.section === 'decide') { x.result = ''; x.state = '논의 전' }
   if (col === 'reports') { x.help = ''; x.available = ''; x.notes = '' }
   return x;
@@ -1105,12 +1302,13 @@ function onMeetings(list){
 const SB_URL = 'https://pdkdnvjobqhukwpcdntz.supabase.co';
 const SB_KEY = 'sb_publishable_C986KzBth3LP378rlY9hCg_q8YLe2iq';
 const ME_KEY = 'istar.meeting.me';
+function setMe(name){ const sel = document.querySelector('.me-sel'); if (!sel) return; sel.value = name; sel.dispatchEvent(new Event('change')) }
 function setupMe(){
   let me = ''; try { me = localStorage.getItem(ME_KEY) || '' } catch {}
   const opts = ['', ...Object.values(PEOPLE).map(p=>p.name), '기타 팀원'];
   document.querySelectorAll('.me-sel').forEach(sel => {
     sel.innerHTML = opts.map(n=>`<option value="${esc(n)}" ${n===me?'selected':''}>${n?esc(n):'이름 선택'}</option>`).join('');
-    sel.addEventListener('change', () => { me = sel.value; try { localStorage.setItem(ME_KEY, me) } catch {} myId = me || null; document.querySelectorAll('.me-sel').forEach(s=>s.value=me); toast(me ? `${me}(으)로 수정 기록이 남아요.` : '이름 없이 수정해요.') });
+    sel.addEventListener('change', () => { me = sel.value; try { localStorage.setItem(ME_KEY, me) } catch {} myId = me || null; document.querySelectorAll('.me-sel').forEach(s=>s.value=me); toast(me ? `${me}(으)로 수정 기록이 남아요.` : '이름 없이 수정해요.'); onMeChange() });
   });
   myId = me || null;
 }
