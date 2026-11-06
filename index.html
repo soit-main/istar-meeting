@@ -1171,7 +1171,7 @@ const ddColor = n => n <= 3 ? 'var(--bad)' : n <= 14 ? 'var(--warn)' : 'var(--mu
 function teamDues(days){
   const today = todayISO(), end = days ? addDays(today, days) : '9999-12-31', out = [];
   S.tasks.forEach(t => { if (t.status !== 'done' && ['deadline','milestone'].includes(t.schedule) && t.due && t.due >= today && t.due <= end) out.push({date: t.due, title: t.short || t.title, who: (t.owners || []).map(pname).join(' · ')}) });
-  S.alines.forEach(l => { const tx = String(l.text || '').trim(); if (l.due && !l.always && tx && l.due >= today && l.due <= end && !out.some(o => o.date === l.due && o.title === tx)) out.push({date: l.due, title: tx, who: l.owner === 'all' ? '전원' : (pname(l.owner) || '담당자 미정')}) });
+  S.alines.forEach(l => { const tx = String(l.text || '').trim(); if (l.due && !l.always && tx && l.due >= today && l.due <= end && !out.some(o => o.date === l.due && (o.title === tx || (pname(l.owner) && o.who.split(' · ').includes(pname(l.owner)))))) out.push({date: l.due, title: tx, who: l.owner === 'all' ? '전원' : (pname(l.owner) || '담당자 미정')}) });
   return out.sort((a, b) => a.date.localeCompare(b.date));
 }
 const dueRows = list => list.length ? list.map(x => { const n = dDay(x.date); return `<div class="dl"><span class="d">${md(x.date)}</span><span>${esc(x.title)}<span class="w">${esc(x.who)}</span></span><span class="dd" style="--c:${ddColor(n)}">${n === 0 ? 'D-DAY' : 'D-' + n}</span></div>` }).join('') : '<p class="edited">예정된 마감이 없어요.</p>';
