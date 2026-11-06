@@ -170,7 +170,8 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--green);b
 .al{position:relative;display:grid;grid-template-columns:10px minmax(0,1fr) 26px;gap:2px 8px;align-items:start;padding:7px 0;border-radius:8px}
 .al::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--b,var(--muted));margin-top:11px;justify-self:center}
 .al:focus-within{background:var(--sunk);box-shadow:0 0 0 6px var(--sunk)}
-.al-main{display:flex;flex-direction:column;gap:4px;min-width:0}
+.al-main{grid-column:2;display:flex;flex-direction:column;gap:4px;min-width:0}
+.al .x{grid-column:3;grid-row:1}
 .al .al-text{border:0;background:transparent;padding:3px 4px;margin-left:-4px;font-size:13.5px;line-height:1.5;color:var(--text);border-radius:5px;resize:none;overflow:hidden;min-height:0;field-sizing:content}
 .al .al-text:hover{background:var(--sunk)}
 .al .al-text:focus{background:var(--paper);box-shadow:0 0 0 1px var(--line-strong)}
@@ -722,7 +723,7 @@ const ownersOf = l => !l || !String(l.text||'').trim() ? [] : l.owner === 'all' 
 const dueText = x => x.always ? '상시' : x.due ? md(x.due) + '(' + wd(x.due) + ')' : '';
 function lineRow(l, i){
   const k = `alines|${esc(l.id)}|`, o = PEOPLE[l.owner], pc = o ? o.c : l.owner === 'all' ? 'var(--green)' : '';
-  return `<div class="al"><span aria-hidden="true"></span><div class="al-main">
+  return `<div class="al"><div class="al-main">
   <textarea class="al-text" rows="1" id="al-t-${esc(l.id)}" data-k="${k}text" placeholder="할 일을 적어 주세요" aria-label="할 일">${esc(l.text||'')}</textarea>
   <div class="al-meta">
     <select class="${pc?'has':''}" style="${pc?`--pc:${pc}`:''}" data-k="${k}owner" aria-label="담당자">${OWN_OPTS.map(([v,n]) => `<option value="${v}" ${(l.owner||'')===v?'selected':''}>${v===''?'담당자 지정':n}</option>`).join('')}</select>
