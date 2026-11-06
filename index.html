@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>i-STAR 마케팅 회의 보드</title>
+<title>Soit 마케팅 회의 보드</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
@@ -125,6 +125,17 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--green);b
 
 .card{background:var(--paper);border:1px solid var(--line);border-radius:var(--r)}
 
+/* meeting bar */
+.mbar{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;justify-content:space-between;padding:12px 16px}
+.mb-cur{display:flex;align-items:flex-end;gap:8px;min-width:0}
+.mb-sel{display:flex;flex-direction:column;gap:3px;min-width:0}
+.mb-sel select{width:auto;min-width:210px;max-width:100%;font-weight:500;font-size:14px;color:var(--ink)}
+.mb-new{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12.5px;color:var(--muted)}
+.mb-new input[type=date]{width:auto}
+.mb-new .chk{font-size:12.5px}
+.mb-tools{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.btn.ghost.danger{color:var(--bad)}
+.rail .mt-sel{font-weight:500;color:var(--ink)}
 /* overview */
 .hero{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:28px;align-items:start}
 .hero .titleblock{display:flex;flex-direction:column;gap:10px}
@@ -378,13 +389,14 @@ fieldset.fld legend{padding:0;margin-bottom:4px}
 </head>
 <body>
 <div class="topbar" aria-label="섹션 이동">
-  <div class="row"><div class="brandmark"><i>i</i><div><b>i-STAR HOLDINGS</b><small>MARKETING</small></div></div><div style="display:flex;gap:6px;align-items:center"><select class="me-sel" aria-label="내 이름 선택" style="width:auto;padding:3px 6px;font-size:12px"></select><div class="live" id="live-m"><i></i><span>불러오는 중</span></div></div></div>
+  <div class="row"><div class="brandmark"><i>S</i><div><b>SOIT</b><small>MARKETING</small></div></div><div style="display:flex;gap:6px;align-items:center"><select class="me-sel" aria-label="내 이름 선택" style="width:auto;padding:3px 6px;font-size:12px"></select><div class="live" id="live-m"><i></i><span>불러오는 중</span></div></div></div>
   <nav id="nav-m"></nav>
 </div>
 <div class="shell" id="app">
   <aside class="rail">
-    <div class="brandmark"><i>i</i><div><b>i-STAR HOLDINGS</b><small>MARKETING WORKSPACE</small></div></div>
+    <div class="brandmark"><i>S</i><div><b>SOIT</b><small>MARKETING WORKSPACE</small></div></div>
     <nav class="nav" id="nav"></nav>
+    <div class="railbox"><h4>회의 날짜</h4><select class="mt-sel" aria-label="회의 날짜 선택"></select></div>
     <div class="railbox"><h4>내 이름</h4><select class="me-sel" aria-label="내 이름 선택"></select></div>
     <div class="railbox"><h4>연결 상태</h4><div class="live" id="live"><i></i><span>불러오는 중</span></div></div>
     <div class="railbox"><h4>최근 변경</h4><ul class="feed" id="feed"><li>아직 변경 기록이 없어요.</li></ul></div>
@@ -392,6 +404,23 @@ fieldset.fld legend{padding:0;margin-bottom:4px}
   <main>
     <div class="wrap">
       <div id="banner" hidden></div>
+
+      <div class="card mbar" id="mbar">
+        <div class="mb-cur">
+          <button class="btn" type="button" data-act="mt-step" data-v="-1" id="mt-prev" aria-label="이전 회의">‹</button>
+          <label class="mb-sel" for="mt-sel"><span class="eyebrow">회의 날짜</span><select id="mt-sel" class="mt-sel"></select></label>
+          <button class="btn" type="button" data-act="mt-step" data-v="1" id="mt-next" aria-label="다음 회의">›</button>
+        </div>
+        <div class="mb-tools">
+          <form class="mb-new" id="mt-form">
+            <label for="mt-date">새 회의 날짜</label>
+            <input type="date" id="mt-date" required>
+            <label class="chk" for="mt-copy"><input type="checkbox" id="mt-copy" checked> 지난 회의 이어받기</label>
+            <button class="btn primary" type="submit" id="mt-go">+ 만들기</button>
+          </form>
+          <span id="mt-delzone"><button class="btn ghost danger" type="button" data-act="mt-ask-del">이 회의 삭제</button></span>
+        </div>
+      </div>
 
       <section id="overview">
         <div class="hero">
@@ -470,7 +499,7 @@ fieldset.fld legend{padding:0;margin-bottom:4px}
         <div class="decide" id="decide-list"></div>
       </section>
 
-      <p class="foot-note">i-STAR HOLDINGS · MARKETING · 한국시간 기준 · 링크가 있는 사람은 누구나 보고 수정할 수 있고, 변경 내용은 열어 둔 모든 화면에 실시간으로 반영됩니다.</p>
+      <p class="foot-note">SOIT · MARKETING · 한국시간 기준 · 링크가 있는 사람은 누구나 보고 수정할 수 있고, 변경 내용은 열어 둔 모든 화면에 실시간으로 반영됩니다.</p>
     </div>
   </main>
 </div>
@@ -532,6 +561,7 @@ const loaded = new Set();
 let dbOff = false;
 const E = (col, msg) => dbOff ? '내용을 불러오지 못했어요. 새로고침해 주세요.' : !loaded.has(col) ? '불러오는 중…' : msg;
 let db = null, user = null, myId = null, dl = null, readOnly = false;
+let cur = null, MEETINGS = [], api = null, unsubs = [];
 let names = {};
 const ui = {kind:'all', astatus:'', aowner:'*', q:'', month:null, brand:'all', cowner:'all'};
 
@@ -550,12 +580,12 @@ function setLive(kind, text){ for (const id of ['live','live-m']) { const el=$(i
 
 // ---------- writes ----------
 const queues = {};
-function write(col, id, patch, mode='update'){
+function write(col, id, patch, mode='update', mt=cur){
   if (!db) { toast('지금은 공유 데이터에 연결되어 있지 않아요.'); return Promise.reject() }
-  const key = col+'/'+id;
+  const key = mt+'|'+col+'/'+id;
   const body = {...patch, updatedAt: Date.now(), ...(myId ? {updatedBy: myId} : {})};
-  const run = () => db.collection(col).doc(id)[mode](body).catch(e => {
-    if (e && e.code === 'invalid_argument' && mode === 'update') return db.collection(col).doc(id).set(clean({...(find(col,id)||{}), ...body}));
+  const run = () => db.collection(col, mt).doc(id)[mode](body).catch(e => {
+    if (e && e.code === 'invalid_argument' && mode === 'update') return db.collection(col, mt).doc(id).set(clean({...(find(col,id)||{}), ...body}));
     throw e;
   }).catch(e => { handleWriteError(e); throw e });
   const p = (queues[key] || Promise.resolve()).catch(()=>{}).then(run);
@@ -576,8 +606,8 @@ function setReadOnly(v){ readOnly=v; document.body.classList.toggle('ro', v) }
 const pending = {};
 function queueField(el, delay=700){
   const [col,id,field] = el.dataset.k.split('|');
-  const key = el.dataset.k; clearTimeout(pending[key]);
-  pending[key] = setTimeout(() => { delete pending[key]; const v = el.type==='checkbox' ? el.checked : el.value; write(col,id,{[field]:v}).catch(()=>{}) }, delay);
+  const key = el.dataset.k, mt = cur; clearTimeout(pending[key]);
+  pending[key] = setTimeout(() => { delete pending[key]; const v = el.type==='checkbox' ? el.checked : el.value; write(col,id,{[field]:v},'update',mt).catch(()=>{}) }, delay);
 }
 document.addEventListener('input', e => { const el=e.target; if (!el.dataset || !el.dataset.k) return; if (el.tagName==='SELECT' || el.type==='checkbox' || el.type==='date') return; if (e.isComposing) return; queueField(el, 900) });
 document.addEventListener('compositionend', e => { const el=e.target; if (el.dataset && el.dataset.k) queueField(el, 900) });
@@ -623,6 +653,10 @@ const who = d => d && d.updatedBy && !/^u_/.test(d.updatedBy) ? `<span>${esc(d.u
 const editedLine = d => d && d.updatedAt ? `<span class="edited">${who(d)}${d.updatedBy?' · ':''}${ago(d.updatedAt)} 수정</span>` : '';
 
 // ---------- meta ----------
+const MON_EN = ['JANUARY','FEBRUARY','MARCH','APRIL','MAY','JUNE','JULY','AUGUST','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER'];
+const WD_EN = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const dateLabelOf = d => `${MON_EN[Number(d.slice(5,7))-1]} ${d.slice(8,10)}, ${d.slice(0,4)} · ${WD_EN[D(d).getUTCDay()].toUpperCase()}`;
+const meetingLabel = d => `${d.slice(0,4)}.${d.slice(5,7)}.${d.slice(8,10)} (${wd(d)})${d===todayISO()?' · 오늘':''}`;
 function renderMeta(){
   const m = S.meta || {};
   $('m-title').textContent = m.title || '마케팅 회의안';
@@ -631,10 +665,8 @@ function renderMeta(){
   $('m-goal').textContent = m.goal || '확정 목표를 적어 두세요.';
   $('m-assets').textContent = m.assetsNote || '';
   $('m-tumblbug').textContent = m.tumblbugNote || '';
-  const dm = (m.dateLabel||'').match(/([A-Z]+)\s+(\d{1,2}),\s*(\d{4})/);
-  const MONTHS = {JANUARY:1,FEBRUARY:2,MARCH:3,APRIL:4,MAY:5,JUNE:6,JULY:7,AUGUST:8,SEPTEMBER:9,OCTOBER:10,NOVEMBER:11,DECEMBER:12};
-  if (dm && MONTHS[dm[1]]) { $('m-day').textContent = `${String(MONTHS[dm[1]]).padStart(2,'0')} / ${dm[2].padStart(2,'0')}`; const wdp = (m.dateLabel.split('·')[1]||'').trim(); $('m-yr').textContent = dm[3] + (wdp ? ' · ' + wdp.charAt(0) + wdp.slice(1).toLowerCase() : '') }
-  document.title = (m.title ? m.title + ' · ' : '') + 'i-STAR 마케팅 회의 보드';
+  if (cur) { $('m-date').textContent = m.dateLabel || dateLabelOf(cur); $('m-day').textContent = `${cur.slice(5,7)} / ${cur.slice(8,10)}`; $('m-yr').textContent = `${cur.slice(0,4)} · ${WD_EN[D(cur).getUTCDay()]}` }
+  document.title = (m.title ? m.title + ' · ' : '') + 'Soit 마케팅 회의 보드';
 }
 
 // ---------- overview ----------
@@ -901,18 +933,99 @@ document.addEventListener('click', e => {
   if (a==='cancel-del') { $('delzone').innerHTML = `<button class="btn danger" type="button" data-act="ask-del">삭제</button>`; return }
   if (a==='do-del') return doDelete();
   if (a==='toggle-task') { const t = find('tasks', el.dataset.id); if (t) write('tasks', t.id, {status: t.status==='done'?'planned':'done'}).catch(()=>{}); return }
+  if (a==='mt-step') { const ds = MEETINGS.map(m=>m.id).sort(), i = ds.indexOf(cur) + Number(el.dataset.v); if (ds[i]) openMeeting(ds[i]); return }
+  if (a==='mt-ask-del') { $('mt-delzone').innerHTML = `<span class="confirm">${meetingLabel(cur)} 회의의 모든 내용이 지워져요. 삭제할까요? <button class="btn danger solid" type="button" data-act="mt-do-del">삭제</button><button class="btn" type="button" data-act="mt-cancel-del">아니요</button></span>`; return }
+  if (a==='mt-cancel-del') return renderMeetings();
+  if (a==='mt-do-del') return deleteMeeting(cur);
   if (a==='rp-tab') return setRp(el.dataset.v);
   if (a==='rp-toggle') { const id = el.dataset.id; if (rpOpen.has(id)) rpOpen.delete(id); else rpOpen.add(id); renderReports(); const f = document.getElementById('ri-d-'+id); if (f && rpOpen.has(id)) f.focus({preventScroll:true}); return }
   if (a==='kind') { ui.kind = el.dataset.v; return mark('assets') }
   if (a==='cbrand') { ui.brand = el.dataset.v; return renderCalendar() }
   if (a==='cal-prev' || a==='cal-next') { const [y,m] = ui.month.split('-').map(Number); const d = new Date(Date.UTC(y, m-1 + (a==='cal-next'?1:-1), 1)); ui.month = d.toISOString().slice(0,7); return renderCalendar() }
   if (a==='cal-today') { ui.month = todayISO().slice(0,7); return renderCalendar() }
-  if (a==='export-assets') return save(`${todayISO()}_L4K3_제작분담표.csv`, [['ID','구분','작업명','제작 내용','화면·음향','선행 확인','사용 시점','자료 마감','세부 담당','상태','예상 시간','메모','콘티 근거','납품 형태','제작 메모'], ...[...S.assets].sort(byOrder).map(x=>[x.code,KINDS[x.kind],x.title,x.brief,x.screen,x.need,x.cue,x.due,(AOWNERS.find(o=>o[0]===(x.owner||''))||[])[1],x.status,x.hours,x.memo,x.source,x.file,x.extra])]);
-  if (a==='export-reports') return save(`${todayISO()}_담당자별_진행보고.csv`, [['담당자','보고 항목','상태','완료 범위','남은 작업','추가 소요일','완료 예정일','지원이 필요한 작업','지원 가능한 날짜·시간','기타 보고'], ...PORDER.flatMap(pid => { const q = PEOPLE[pid], rep = S.reports.find(r=>r.id===pid)||{}; return itemsOf(pid).map(r => [q.name+' '+q.role, r.title, r.status||'진행 전', r.done, r.left, r.days, r.eta, rep.help, rep.available, rep.notes]) })]);
+  if (a==='export-assets') return save(`${cur}_L4K3_제작분담표.csv`, [['ID','구분','작업명','제작 내용','화면·음향','선행 확인','사용 시점','자료 마감','세부 담당','상태','예상 시간','메모','콘티 근거','납품 형태','제작 메모'], ...[...S.assets].sort(byOrder).map(x=>[x.code,KINDS[x.kind],x.title,x.brief,x.screen,x.need,x.cue,x.due,(AOWNERS.find(o=>o[0]===(x.owner||''))||[])[1],x.status,x.hours,x.memo,x.source,x.file,x.extra])]);
+  if (a==='export-reports') return save(`${cur}_담당자별_진행보고.csv`, [['담당자','보고 항목','상태','완료 범위','남은 작업','추가 소요일','완료 예정일','지원이 필요한 작업','지원 가능한 날짜·시간','기타 보고'], ...PORDER.flatMap(pid => { const q = PEOPLE[pid], rep = S.reports.find(r=>r.id===pid)||{}; return itemsOf(pid).map(r => [q.name+' '+q.role, r.title, r.status||'진행 전', r.done, r.left, r.days, r.eta, rep.help, rep.available, rep.notes]) })]);
 });
 
 // ---------- empty first frame ----------
 COLS.forEach(c=>dirty.add(c)); flush();
+
+// ---------- meetings ----------
+function renderMeetings(){
+  const ds = MEETINGS.map(m=>m.id).sort().reverse();
+  document.querySelectorAll('.mt-sel').forEach(sel => { sel.innerHTML = ds.length ? ds.map(d=>`<option value="${d}" ${d===cur?'selected':''}>${meetingLabel(d)}</option>`).join('') : '<option value="">회의 없음</option>' });
+  const asc = [...ds].reverse(), i = asc.indexOf(cur);
+  $('mt-prev').disabled = i <= 0; $('mt-next').disabled = i < 0 || i >= asc.length - 1;
+  $('mt-delzone').innerHTML = ds.length > 1 && !readOnly ? '<button class="btn ghost danger" type="button" data-act="mt-ask-del">이 회의 삭제</button>' : '';
+  syncNewBtn();
+}
+function syncNewBtn(){ const d = $('mt-date').value, has = MEETINGS.some(m=>m.id===d); $('mt-go').textContent = has ? '이 날짜 열기' : '+ 만들기'; $('mt-copy').closest('label').hidden = has }
+document.addEventListener('change', e => { if (e.target.classList && e.target.classList.contains('mt-sel') && e.target.value) openMeeting(e.target.value) });
+$('mt-date').addEventListener('input', syncNewBtn);
+$('mt-date').value = todayISO();
+$('mt-form').addEventListener('submit', async e => {
+  e.preventDefault(); const d = $('mt-date').value; if (!/^\d{4}-\d{2}-\d{2}$/.test(d)) { toast('날짜를 골라 주세요.'); return }
+  if (MEETINGS.some(m=>m.id===d)) return openMeeting(d);
+  const btn = $('mt-go'); btn.disabled = true; btn.textContent = '만드는 중…';
+  try { await createMeeting(d, $('mt-copy').checked) } catch { toast('회의를 만들지 못했어요. 다시 시도해 주세요.') } finally { btn.disabled = false; syncNewBtn() }
+});
+function openMeeting(d){
+  if (!d || d === cur || !api) return;
+  if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
+  if (modal) closeModal();
+  cur = d;
+  try { const u = new URL(location.href); u.searchParams.set('m', d); history.replaceState(null, '', u) } catch {}
+  unsubs.forEach(f => f()); unsubs = [];
+  COLS.forEach(c => { S[c] = c === 'meta' ? {} : []; loaded.delete(c) });
+  rpSeen.clear(); rpOpen.clear(); deferred.clear();
+  COLS.forEach(c => mark(c));
+  renderMeetings();
+  for (const c of COLS) {
+    const mt = d;
+    unsubs.push(db.collection(c, mt).onSnapshot(snap => {
+      if (mt !== cur) return;
+      const docs = snap.docs.map(x => ({id:x.id, ...x.data()}));
+      if (c === 'meta') S.meta = docs.find(x => x.id === 'main') || {}; else S[c] = docs;
+      loaded.add(c); mark(c);
+    }, () => { setLive('off','연결 실패'); if (!loaded.has(c)) showBanner() }));
+  }
+}
+function retitle(t, d){ const md2 = `${Number(d.slice(5,7))}월 ${Number(d.slice(8,10))}일`; return /^\d{1,2}월\s*\d{1,2}일/.test(t||'') ? t.replace(/^\d{1,2}월\s*\d{1,2}일/, md2) : `${md2} 마케팅 회의안` }
+function carry(col, d, date){
+  const x = {...d}; ['updatedAt','updatedBy','createdAt','createdBy'].forEach(k => delete x[k]);
+  if (col === 'meta') { x.title = retitle(x.title, date); x.dateLabel = dateLabelOf(date) }
+  if (col === 'agenda' && x.section === 'decide') { x.result = ''; x.state = '논의 전' }
+  if (col === 'reports') { x.help = ''; x.available = ''; x.notes = '' }
+  return x;
+}
+async function createMeeting(date, copy){
+  const ds = MEETINGS.map(m=>m.id).sort();
+  const prev = ds.filter(x => x < date).pop() || ds[ds.length-1];
+  let rows = [];
+  if (copy && prev) rows = (await api.fetchMeeting(prev)).map(r => ({col:r.col, id:r.id, data:carry(r.col, r.data, date)}));
+  if (!rows.some(r => r.col === 'meta')) rows.push({col:'meta', id:'main', data:{title:retitle('', date), dateLabel:dateLabelOf(date), subtitle:'', goal:''}});
+  for (const pid of PORDER) if (!rows.some(r => r.col === 'reports' && r.id === pid)) rows.push({col:'reports', id:pid, data:{items:'', help:'', available:'', notes:''}});
+  await api.putMeeting(date, rows, {createdAt: Date.now(), from: copy && prev ? prev : null, ...(myId?{createdBy:myId}:{})});
+  openMeeting(date);
+  toast(copy && prev ? `${meetingLabel(date)} 회의를 만들었어요. ${meetingLabel(prev)} 내용을 이어받았어요.` : `${meetingLabel(date)} 회의를 만들었어요.`);
+}
+async function deleteMeeting(d){
+  const rest = MEETINGS.map(m=>m.id).filter(x => x !== d).sort();
+  if (!rest.length) return;
+  try { await api.removeMeeting(d); toast(`${meetingLabel(d)} 회의를 삭제했어요.`); cur = null; openMeeting(rest[rest.length-1]) } catch { toast('삭제하지 못했어요. 다시 시도해 주세요.'); renderMeetings() }
+}
+function onMeetings(list){
+  MEETINGS = list;
+  const ds = list.map(m=>m.id).sort();
+  if (!ds.length) { renderMeetings(); return }
+  if (!cur || !ds.includes(cur)) {
+    let want = null; try { want = new URL(location.href).searchParams.get('m') } catch {}
+    if (cur && !ds.includes(cur)) toast('보고 있던 회의가 삭제되어 최근 회의로 옮겼어요.');
+    const pick = (!cur && want && ds.includes(want)) ? want : ds.includes(todayISO()) ? todayISO() : ds[ds.length-1];
+    cur = cur && !ds.includes(cur) ? null : cur;
+    openMeeting(pick);
+  } else renderMeetings();
+}
 
 // ---------- connect (Supabase) ----------
 const SB_URL = 'https://pdkdnvjobqhukwpcdntz.supabase.co';
@@ -928,39 +1041,56 @@ function setupMe(){
   myId = me || null;
 }
 function makeDb(sb){
-  const store = {}, subs = {}; COLS.forEach(c => { store[c] = new Map(); subs[c] = [] });
-  let ready = false;
-  const emit = c => { const docs = [...store[c].entries()].map(([id,d]) => ({id, data: () => d})); subs[c].forEach(([n]) => n({docs, metadata:{fromCache:false, hasPendingWrites:false}})) };
-  const apply = (c, id, data) => { if (!store[c]) return; if (data == null) store[c].delete(id); else store[c].set(id, data); if (ready) emit(c) };
-  const fail = () => COLS.forEach(c => subs[c].forEach(([,e]) => e && e({code:'unavailable'})));
-  async function load(){
-    const {data, error} = await sb.from('meeting_docs').select('col,id,data').limit(5000);
+  const store = new Map(), subs = new Map(), ready = new Set(), loading = new Map();
+  const bucket = c => { if (!store.has(c)) store.set(c, new Map()); return store.get(c) };
+  const emit = c => { const docs = [...bucket(c).entries()].map(([id,d]) => ({id, data: () => d})); (subs.get(c)||new Set()).forEach(([n]) => n({docs, metadata:{fromCache:false, hasPendingWrites:false}})) };
+  const apply = (c, id, data) => { if (!ready.has(c)) return; const m = bucket(c); if (data == null) m.delete(id); else m.set(id, data); emit(c) };
+  async function load(cols){
+    const {data, error} = await sb.from('meeting_docs').select('col,id,data').in('col', cols).limit(1000);
     if (error) throw error;
-    COLS.forEach(c => store[c].clear());
-    data.forEach(r => store[r.col] && store[r.col].set(r.id, r.data));
-    ready = true; COLS.forEach(emit);
+    cols.forEach(c => bucket(c).clear());
+    data.forEach(r => bucket(r.col).set(r.id, r.data));
+    cols.forEach(c => { ready.add(c); emit(c) });
   }
-  let first = true;
+  let pend = new Set(), timer = 0;
+  function want(c){ if (ready.has(c)) { emit(c); return } pend.add(c); clearTimeout(timer); timer = setTimeout(() => { const cols = [...pend]; pend = new Set(); load(cols).catch(() => cols.forEach(c => (subs.get(c)||new Set()).forEach(([,e]) => e && e({code:'unavailable'})))) }, 20) }
+  let connected = false;
   sb.channel('meeting_docs_live')
     .on('postgres_changes', {event:'*', schema:'public', table:'meeting_docs'}, p => {
       if (p.eventType === 'DELETE') { if (p.old && p.old.col) apply(p.old.col, p.old.id, null) }
       else if (p.new && p.new.col) apply(p.new.col, p.new.id, p.new.data);
     })
     .subscribe(status => {
-      if (status === 'SUBSCRIBED') { load().then(() => setLive('on','실시간 연결됨')).catch(() => { if (first) fail() }); first = false }
-      else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT') { setLive('slow','실시간 재연결 중'); if (first) load().catch(fail) }
+      if (status === 'SUBSCRIBED') { const cols = [...subs.keys()].filter(c => subs.get(c).size); if (connected && cols.length) { cols.forEach(c => ready.delete(c)); cols.forEach(want) } connected = true; setLive('on','실시간 연결됨') }
+      else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT') setLive('slow','실시간 재연결 중');
       else if (status === 'CLOSED') setLive('slow','연결이 끊겼어요 · 새로고침해 주세요');
     });
   const err = e => ({code: 'unavailable', message: e && e.message});
   const ref = (c, id) => ({ id,
-    update: async p => { const {error} = await sb.rpc('meeting_patch', {p_col:c, p_id:id, p_patch:p}); if (error) throw err(error); apply(c, id, {...(store[c].get(id)||{}), ...p}) },
+    update: async p => { const {error} = await sb.rpc('meeting_patch', {p_col:c, p_id:id, p_patch:p}); if (error) throw err(error); apply(c, id, {...(bucket(c).get(id)||{}), ...p}) },
     set: async d => { const {error} = await sb.from('meeting_docs').upsert({col:c, id, data:d, updated_at:new Date().toISOString()}); if (error) throw err(error); apply(c, id, d) },
     delete: async () => { const {error} = await sb.from('meeting_docs').delete().eq('col', c).eq('id', id); if (error) throw err(error); apply(c, id, null) }
   });
-  return { collection: c => ({
+  const real = (c, mt) => c === 'meetings' ? c : `${c}@${mt}`;
+  const raw = c => ({
     doc: id => ref(c, id || (Date.now().toString(36) + Math.random().toString(36).slice(2, 8))),
-    onSnapshot: (n, e) => { subs[c].push([n, e]); if (ready) emit(c); return () => {} }
-  })};
+    onSnapshot: (n, e) => { const entry = [n, e]; if (!subs.has(c)) subs.set(c, new Set()); subs.get(c).add(entry); want(c); return () => subs.get(c).delete(entry) }
+  });
+  api = {
+    fetchMeeting: async mt => { const cols = COLS.map(c => real(c, mt)); const {data, error} = await sb.from('meeting_docs').select('col,id,data').in('col', cols).limit(1000); if (error) throw error; return data.map(r => ({col: r.col.split('@')[0], id: r.id, data: r.data})) },
+    putMeeting: async (mt, rows, info) => {
+      const now = new Date().toISOString();
+      for (let i = 0; i < rows.length; i += 200) { const {error} = await sb.from('meeting_docs').upsert(rows.slice(i, i+200).map(r => ({col: real(r.col, mt), id: r.id, data: r.data, updated_at: now}))); if (error) throw error }
+      const {error} = await sb.from('meeting_docs').upsert({col:'meetings', id: mt, data: info, updated_at: now}); if (error) throw error;
+      apply('meetings', mt, info);
+    },
+    removeMeeting: async mt => {
+      const {error} = await sb.from('meeting_docs').delete().in('col', COLS.map(c => real(c, mt))); if (error) throw error;
+      const r2 = await sb.from('meeting_docs').delete().eq('col','meetings').eq('id', mt); if (r2.error) throw r2.error;
+      apply('meetings', mt, null);
+    }
+  };
+  return { collection: (c, mt = cur) => raw(real(c, mt)) };
 }
 (async () => {
   setupMe();
@@ -969,14 +1099,7 @@ function makeDb(sb){
   const slow = setTimeout(() => { if (loaded.size < COLS.length) setLive('slow','연결 지연 · 최신이 아닐 수 있음') }, 10000);
   if (!window.supabase || !window.supabase.createClient) { clearTimeout(slow); setLive('off','연결 실패'); showBanner(); return }
   db = makeDb(window.supabase.createClient(SB_URL, SB_KEY, {auth:{persistSession:false}}));
-  for (const c of COLS) {
-    db.collection(c).onSnapshot(snap => {
-      const docs = snap.docs.map(d => ({id:d.id, ...d.data()}));
-      if (c === 'meta') S.meta = docs.find(d => d.id === 'main') || {}; else S[c] = docs;
-      loaded.add(c); if (loaded.size === COLS.length) clearTimeout(slow);
-      mark(c);
-    }, () => { clearTimeout(slow); setLive('off','연결 실패'); if (!loaded.has(c)) showBanner() });
-  }
+  db.collection('meetings').onSnapshot(snap => { clearTimeout(slow); onMeetings(snap.docs.map(d => ({id:d.id, ...d.data()}))) }, () => { clearTimeout(slow); setLive('off','연결 실패'); showBanner() });
 })();
 function showBanner(){ dbOff = true; COLS.forEach(c=>mark(c)); const b=$('banner'); b.hidden=false; b.className='banner'; b.innerHTML='<strong>회의 내용을 불러오지 못했어요.</strong><br>인터넷 연결을 확인하고 새로고침해 주세요. 회사 네트워크에서 막혀 있다면 휴대폰 데이터로 열어 보세요.' }
 })();
