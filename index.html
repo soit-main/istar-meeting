@@ -404,6 +404,37 @@ fieldset.fld legend{padding:0;margin-bottom:4px}
 .banner{border:1px solid color-mix(in srgb,var(--warn) 45%,var(--line));background:color-mix(in srgb,var(--warn) 9%,var(--paper));padding:12px 16px;border-radius:var(--r);font-size:13px}
 .foot-note{font-size:12px;color:var(--muted);text-align:center}
 
+/* project discussions */
+.projs{display:flex;flex-direction:column;gap:18px}
+.proj{overflow:hidden}
+.proj-head{display:flex;align-items:center;gap:10px 14px;flex-wrap:wrap;padding:16px 20px}
+.proj.open .proj-head{border-bottom:1px solid var(--line)}
+.proj-head h3{font-size:17px;font-family:var(--f-display);min-width:0}
+.tpl-chip{font-size:11.5px;padding:2px 9px;border-radius:999px;background:var(--green-soft);color:var(--green);white-space:nowrap}
+.proj-sum{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}
+.proj-sum span{font-size:12px;padding:2px 9px;border-radius:999px;background:var(--sunk);color:var(--muted);white-space:nowrap}
+.proj-sum span b{color:var(--ink);font-family:var(--f-mono);font-weight:500}
+.proj-acts{display:flex;gap:4px}
+.proj-body{padding:18px 20px 22px;display:flex;flex-direction:column;gap:26px}
+.proj-note{font-size:13.5px;white-space:pre-line;background:var(--sunk);border-radius:10px;padding:12px 14px;color:var(--text)}
+.psec-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.psec-head h4{margin:0;font-size:14.5px;color:var(--ink)}
+.psec-head h4 small{font-weight:400;color:var(--muted);font-size:12px;margin-left:6px}
+.psec .al-list{max-width:760px}
+.psec .al-meta select.st{width:auto}
+.psec .assets{border-radius:10px}
+.pfilter{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+.pfilter input{max-width:240px}
+.tpls{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;grid-column:1/-1}
+.tpl{text-align:left;border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--paper);display:flex;flex-direction:column;gap:6px}
+.tpl:hover{border-color:var(--line-strong)}
+.tpl.on{border-color:var(--green);box-shadow:0 0 0 1.5px var(--green);background:color-mix(in srgb,var(--green) 4%,var(--paper))}
+.tpl b{font-size:14px;color:var(--ink)}
+.tpl small{font-size:12px;color:var(--muted);line-height:1.5}
+.tpl .secs{display:flex;gap:4px;flex-wrap:wrap}
+.tpl .secs i{font-style:normal;font-size:11px;padding:1px 7px;border-radius:999px;background:var(--sunk);color:var(--muted)}
+.modal.wide{width:min(880px,100%)}
+
 /* app bar + view modes */
 .appbar{background:var(--paper);border-bottom:1px solid var(--line)}
 .ab-in{display:flex;align-items:center;gap:12px 16px;flex-wrap:wrap;padding-block:12px;padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px))}
@@ -521,6 +552,7 @@ body[data-mode="mine"] .wrap,body[data-mode="meeting"] .wrap{max-width:1360px}
             <label for="mt-date">새 회의 날짜</label>
             <input type="date" id="mt-date" required>
             <label class="chk" for="mt-copy"><input type="checkbox" id="mt-copy" checked> 지난 회의 이어받기</label>
+            <label class="chk" for="mt-copyp"><input type="checkbox" id="mt-copyp"> 프로젝트 논의도</label>
             <button class="btn primary" type="submit" id="mt-go">+ 만들기</button>
           </form>
           <span id="mt-delzone"><button class="btn ghost danger" type="button" data-act="mt-ask-del">이 회의 삭제</button></span>
@@ -562,26 +594,11 @@ body[data-mode="mine"] .wrap,body[data-mode="meeting"] .wrap{max-width:1360px}
         <div id="report-list"></div>
       </section>
 
-      <section id="assets">
-        <div class="sec-head"><div><span class="eyebrow">L4K3 / Production list</span><h2>콘티 기반 제작·분담 리스트</h2><p class="lede">최종 자료 마감 11.20 · 세부 담당·상태·예상 시간·메모를 바로 입력하세요.</p></div>
-          <div class="actions"><button class="btn" data-act="export-assets" data-dl hidden>분담표 CSV 저장</button><button class="btn primary" data-edit data-act="new" data-col="assets">+ 작업 추가</button></div></div>
-        <div class="card progress" id="asset-progress"></div>
-        <div class="asset-tools">
-          <div class="grp" id="kind-chips"></div>
-          <select id="f-astatus" aria-label="상태 필터"></select>
-          <select id="f-aowner" aria-label="담당 필터"></select>
-          <input class="search" id="f-asearch" type="text" placeholder="ID·작업명·내용 검색" aria-label="제작 리스트 검색">
-        </div>
-        <div class="assets" id="asset-list"></div>
-        <div class="callout"><p id="m-assets"></p><button class="btn ghost" data-edit data-act="edit-meta" data-set="assets">편집</button></div>
-      </section>
-
-      <section id="tumblbug">
-        <div class="sec-head"><div><span class="eyebrow">VAELIN / Tumblbug</span><h2>텀블벅 입점 준비</h2><p class="lede">차두이 사원 담당. 항목별 준비 상태와 누락 내용을 기록합니다.</p></div>
-          <div class="actions" data-edit><button class="btn" data-act="new" data-col="prep">+ 준비 항목</button><button class="btn primary" data-act="new" data-col="roadmap">+ 로드맵 단계</button></div></div>
-        <div class="prep" id="prep-list"></div>
-        <div class="tablewrap"><table><thead><tr><th>기간</th><th>해야 할 일</th><th>담당</th><th>완료 기준</th><th>완료</th><th></th></tr></thead><tbody id="roadmap-list"></tbody></table></div>
-        <div class="callout"><p id="m-tumblbug"></p><button class="btn ghost" data-edit data-act="edit-meta" data-set="tumblbug">편집</button></div>
+      <span id="ph-projects" hidden></span>
+      <section id="projects">
+        <div class="sec-head"><div><span class="eyebrow">Projects</span><h2>프로젝트 논의</h2><p class="lede">진행 중인 큰 프로젝트를 골라 이번 회의에서 세부 사항을 논의해요. 템플릿을 고르면 체크리스트·일정 틀이 같이 만들어져요.</p></div>
+          <div class="actions" data-edit><button class="btn primary" type="button" data-act="proj-new">+ 프로젝트 추가</button></div></div>
+        <div class="projs" id="proj-list"></div>
       </section>
 
       <section id="status">
@@ -648,15 +665,15 @@ const BRANDS = {
 const KINDS = {video:'영상', graphic:'그래픽·화면', ops:'운영·준비'};
 const ASTATUS = ['미보고','자료 확인 중','제작 중','검수 중','완료','지원 필요'];
 const ASTATUS_C = {'미보고':'var(--line-strong)','자료 확인 중':'var(--info)','제작 중':'var(--geum)','검수 중':'var(--warn)','완료':'var(--ok)','지원 필요':'var(--bad)'};
-const AOWNERS = [['','분담 미정 · 이한결 총괄'],['hong','홍진솔 과장'],['cha','차두이 사원'],['lee','이한결 사원'],['noh','노건희 주임'],['pd','송출 PD / 제작사']];
+const AOWNERS = [['','분담 미정'],['hong','홍진솔 과장'],['cha','차두이 사원'],['lee','이한결 사원'],['noh','노건희 주임'],['pd','송출 PD / 제작사']];
 const PREP_STATES = ['미확인','준비 중','누락 있음','완료'];
 const PREP_C = {'미확인':'var(--muted)','준비 중':'var(--info)','누락 있음':'var(--bad)','완료':'var(--ok)'};
 const DECIDE_STATES = ['논의 전','논의 중','결정됨','보류'];
 const DECIDE_C = {'논의 전':'var(--muted)','논의 중':'var(--warn)','결정됨':'var(--ok)','보류':'var(--bad)'};
 const SCHEDULES = [['deadline','마감일'],['milestone','확정일 (오픈·시작)'],['range','기간'],['month','월 단위 (날짜 미정)'],['unscheduled','날짜 미정']];
-const COL_LABEL = {tasks:'업무',assets:'L4K3 작업',reports:'진행 보고',ritems:'보고 항목',alines:'회의안 할 일',agenda:'회의안',prep:'텀블벅 준비',roadmap:'텀블벅 로드맵',meta:'회의 개요'};
-const COLS = ['meta','tasks','assets','reports','ritems','agenda','alines','prep','roadmap'];
-const NAV = [['overview','회의 개요'],['agenda','오늘 회의안'],['reports','개인별 보고'],['assets','L4K3 제작·분담'],['tumblbug','텀블벅 준비'],['status','업무 현황'],['calendar','전체 캘린더'],['roadmap','담당자 로드맵'],['decide','정할 사항']];
+const COL_LABEL = {tasks:'업무',projects:'프로젝트',pitems:'프로젝트 항목',assets:'L4K3 작업',reports:'진행 보고',ritems:'보고 항목',alines:'회의안 할 일',agenda:'회의안',prep:'텀블벅 준비',roadmap:'텀블벅 로드맵',meta:'회의 개요'};
+const COLS = ['meta','tasks','projects','pitems','reports','ritems','agenda','alines'];
+const NAV = [['overview','회의 개요'],['agenda','오늘 회의안'],['reports','개인별 보고'],['projects','프로젝트 논의'],['status','업무 현황'],['calendar','전체 캘린더'],['roadmap','담당자 로드맵'],['decide','정할 사항']];
 
 const todayISO = () => new Date(Date.now() + 9*3600e3).toISOString().slice(0,10);
 const D = s => new Date(s + 'T12:00:00Z');
@@ -670,7 +687,7 @@ const byOrder = (a,b) => (a.order ?? 1e9) - (b.order ?? 1e9) || String(a.id).loc
 const pname = id => PEOPLE[id] ? PEOPLE[id].name : (id==='pd' ? '송출 PD' : '');
 
 // ---------- state ----------
-const S = {meta:{}, tasks:[], assets:[], reports:[], ritems:[], agenda:[], alines:[], prep:[], roadmap:[]};
+const S = {meta:{}, tasks:[], projects:[], pitems:[], reports:[], ritems:[], agenda:[], alines:[]};
 const loaded = new Set();
 let dbOff = false;
 const E = (col, msg) => dbOff ? '내용을 불러오지 못했어요. 새로고침해 주세요.' : !loaded.has(col) ? '불러오는 중…' : msg;
@@ -704,7 +721,7 @@ function write(col, id, patch, mode='update', mt=cur){
   }).catch(e => { handleWriteError(e); throw e });
   const p = (queues[key] || Promise.resolve()).catch(()=>{}).then(run);
   queues[key] = p;
-  if (col === 'alines') p.then(() => syncLine(id, mt)).catch(() => {});
+  if (col === 'alines' || col === 'pitems') p.then(() => syncLine(id, mt)).catch(() => {});
   return p;
 }
 function handleWriteError(e){
@@ -726,14 +743,14 @@ function queueField(el, delay=700){
   pending[key] = setTimeout(() => { delete pending[key]; const v = el.type==='checkbox' ? el.checked : el.value; write(col,id,{[field]:v},'update',mt).catch(()=>{}) }, delay);
 }
 document.addEventListener('input', e => { const el=e.target; if (!el.dataset || !el.dataset.k) return; if (el.tagName==='SELECT' || el.type==='checkbox' || el.type==='date') return; if (e.isComposing) return; queueField(el, 900) });
-document.addEventListener('keydown', e => { const el = e.target; if (!el.classList || !el.classList.contains('al-text') || e.key !== 'Enter' || e.isComposing || e.shiftKey) return; e.preventDefault(); const l = find('alines', el.dataset.k.split('|')[1]); queueField(el, 0); if (l) addLine(l.aid) });
+document.addEventListener('keydown', e => { const el = e.target; if (!el.classList || !el.classList.contains('al-text') || e.key !== 'Enter' || e.isComposing || e.shiftKey) return; e.preventDefault(); const [kc, kid] = el.dataset.k.split('|'); queueField(el, 0); if (kc === 'alines') { const l = find('alines', kid); if (l) addLine(l.aid) } else if (kc === 'pitems') { const x = find('pitems', kid); if (x) addPitem(x.proj, x.sec) } });
 document.addEventListener('input', e => { const el = e.target; if (el.classList && el.classList.contains('al-text') && !CSS.supports('field-sizing','content')) { el.style.height = 'auto'; el.style.height = el.scrollHeight + 'px' } });
 document.addEventListener('compositionend', e => { const el=e.target; if (el.dataset && el.dataset.k) queueField(el, 900) });
 document.addEventListener('change', e => { const el=e.target; if (!el.dataset || !el.dataset.k) return; if (el.dataset.k.endsWith('|always')) { const d = el.closest('.al-meta, .ri-meta'); const di = d && d.querySelector('input[data-k$="|deadline"], input[data-k$="|due"]'); if (di) di.disabled = el.checked; const lb = el.closest('label'); if (lb) lb.classList.toggle('on', el.checked) } queueField(el, 0) });
 document.addEventListener('focusout', e => { const el=e.target; if (el.dataset && el.dataset.k && pending[el.dataset.k]) queueField(el, 0); setTimeout(releaseDeferred, 0) });
 
 // sections that hold typed fields: while someone types in one, hold its re-render until they leave it
-const SECTIONS = {assets:['asset-list'], reports:['report-list','v-mine'], ritems:['report-list','v-mine'], meta:['v-mine'], agenda:['agenda-list','decide-list'], alines:['agenda-list'], prep:['prep-list'], roadmap:['roadmap-list']};
+const SECTIONS = {projects:['proj-list'], pitems:['proj-list'], reports:['report-list','v-mine'], ritems:['report-list','v-mine'], meta:['v-mine'], agenda:['agenda-list','decide-list'], alines:['agenda-list'], prep:['prep-list'], roadmap:['roadmap-list']};
 const deferred = new Set();
 function editingIn(col){
   const a = document.activeElement;
@@ -752,14 +769,12 @@ function flush(){
   for (const c of [...d]) if (editingIn(c)) { d.delete(c); deferred.add(c) }
   if (d.has('meta')) renderMeta();
   if (d.has('tasks')) { renderStats(); renderDues(); renderBrands(); renderCalendar(); renderPeople() }
-  if (d.has('assets')) { renderStats(); renderAssets() }
+  if (d.has('projects') || d.has('pitems')) { renderStats(); renderProjects() }
   if (d.has('reports') || d.has('ritems')) { if (mode === 'full') renderReports(); else $('report-list').innerHTML = '' }
   if (mode === 'mine' && ['ritems','reports','tasks','alines','agenda','meta'].some(c => d.has(c))) renderMine();
-  if (mode === 'meeting' && ['ritems','tasks','alines','meta'].some(c => d.has(c))) renderMeetingView();
+  if (mode === 'meeting' && ['ritems','tasks','alines','pitems','meta'].some(c => d.has(c))) renderMeetingView();
   if (d.has('meta')) renderAppbar();
   if (d.has('agenda') || d.has('alines')) { renderAgenda(); renderDecide() }
-  if (d.has('prep')) renderPrep();
-  if (d.has('roadmap')) renderRoadmap();
   renderFeed();
   if (focusNext) { const el = document.getElementById(focusNext); if (el) { focusNext = null; el.focus() } }
   if (keep) { const el = document.querySelector(`[data-k="${CSS.escape(keep.k)}"]`); if (el && el !== document.activeElement) { if (el.type==='checkbox') el.checked = keep.c; else el.value = keep.v; el.focus({preventScroll:true}); try { if (keep.s != null) el.setSelectionRange(keep.s, keep.e) } catch {} } }
@@ -785,8 +800,6 @@ function renderMeta(){
   $('m-date').textContent = m.dateLabel || 'MARKETING MEETING';
   $('m-sub').textContent = m.subtitle || '';
   $('m-goal').textContent = m.goal || '확정 목표를 적어 두세요.';
-  $('m-assets').textContent = m.assetsNote || '';
-  $('m-tumblbug').textContent = m.tumblbugNote || '';
   if (cur) { $('m-date').textContent = m.dateLabel || dateLabelOf(cur); $('m-day').textContent = `${cur.slice(5,7)} / ${cur.slice(8,10)}`; $('m-yr').textContent = `${cur.slice(0,4)} · ${WD_EN[D(cur).getUTCDay()]}` }
   document.title = (m.title ? m.title + ' · ' : '') + 'Soit 마케팅 회의 보드';
 }
@@ -794,8 +807,7 @@ function renderMeta(){
 // ---------- overview ----------
 function renderStats(){
   const t = S.tasks, done = t.filter(x=>x.status==='done').length;
-  const a = S.assets, adone = a.filter(x=>x.status==='완료').length;
-  $('stats').innerHTML = [['전체 업무',t.length,'건'],['완료된 업무',done,'건'],['남은 업무',t.length-done,'건'],['L4K3 작업 완료',`${adone}<span>/ ${a.length}</span>`,'']].map(([l,n,u])=>`<div class="card stat"><small>${l}</small><strong>${typeof n==='number'?String(n).padStart(2,'0'):n}${u?`<span>${u}</span>`:''}</strong></div>`).join('');
+  $('stats').innerHTML = [['전체 업무',t.length,'건'],['완료된 업무',done,'건'],['남은 업무',t.length-done,'건'],['프로젝트 논의',S.projects.length,'건']].map(([l,n,u])=>`<div class="card stat"><small>${l}</small><strong>${typeof n==='number'?String(n).padStart(2,'0'):n}${u?`<span>${u}</span>`:''}</strong></div>`).join('');
 }
 function renderDues(){
   const today = todayISO();
@@ -839,20 +851,20 @@ async function deleteLine(id, mt = cur){
 // keeps each owner's progress list in step with the agenda line
 async function syncLine(lid, mt = cur, gone = false){
   if (mt !== cur) return;
-  const l = gone ? null : S.alines.find(x => x.id === lid);
+  const l = gone ? null : (S.alines.find(x => x.id === lid) || pitemLine(lid));
   const want = ownersOf(l), links = (l && l.links) || {};
   const idFor = pid => links[pid] || `a-${lid}-${pid}`;
-  const ag = l && S.agenda.find(a => a.id === l.aid);
+  const ag = l && (l.proj ? S.projects.find(x => x.id === l.proj) : S.agenda.find(a => a.id === l.aid));
   for (const pid of want) {
     const rid = idFor(pid), exists = find('ritems', rid);
-    const patch = {pid, lid, aid: l.aid, title: String(l.text).trim(), deadline: l.always ? '' : (l.due || ''), always: !!l.always, src: ag ? ag.title : ''};
-    if (!exists) Object.assign(patch, {order: 10000 + (ag ? (ag.order||0) : 0) * 100 + (l.order||0), status: '진행 전'});
+    const patch = {pid, lid, aid: l.aid || '', proj: l.proj || '', lkind: l.proj ? 'p' : 'a', title: String(l.text).trim(), deadline: l.always ? '' : (l.due || ''), always: !!l.always, src: ag ? ag.title : ''};
+    if (!exists) Object.assign(patch, {order: (l.proj ? 20000 : 10000) + (ag ? (ag.order||0) : 0) * 100 + (l.order||0), status: '진행 전'});
     if (exists && exists.title === patch.title && (exists.deadline||'') === patch.deadline && !!exists.always === patch.always && exists.src === patch.src && exists.lid === lid) continue;
     write('ritems', rid, patch, 'update', mt).catch(() => {});
   }
   for (const r of S.ritems.filter(r => r.lid === lid && !want.includes(r.pid))) {
     if (String(r.id).startsWith('a-') && !r.done && !r.left && !r.days && !r.eta) db.collection('ritems', mt).doc(r.id).delete().catch(() => {});
-    else write('ritems', r.id, {lid: '', aid: '', src: '', deadline: '', always: false}, 'update', mt).catch(() => {});
+    else write('ritems', r.id, {lid: '', aid: '', proj: '', lkind: '', src: '', deadline: '', always: false}, 'update', mt).catch(() => {});
   }
 }
 function renderDecide(){
@@ -886,7 +898,7 @@ function renderReports(){
   if (!rpSeen.has(pid)) { rpSeen.add(pid); const first = items.find(r => r.status !== '완료') || items[0]; if (first) rpOpen.add(first.id) }
   const list = items.map((r, i) => { const no = String(i+1).padStart(2,'0'), st = r.status || '진행 전', k = `ritems|${esc(r.id)}|`;
     const sum = r.left ? '남은 작업 · ' + firstLine(r.left) : r.done ? '완료 범위 · ' + firstLine(r.done) : '아직 적지 않았어요';
-    const tags = (r.lid ? `<span class="tagchip al2">회의안${r.src?' · '+esc(r.src):''}</span>` : '') + (r.always ? '<span class="tagchip dl">상시</span>' : r.deadline ? `<span class="tagchip dl">마감 ${md(r.deadline)}</span>` : '');
+    const tags = (r.lid ? `<span class="tagchip al2">${r.lkind==='p'?'프로젝트':'회의안'}${r.src?' · '+esc(r.src):''}</span>` : '') + (r.always ? '<span class="tagchip dl">상시</span>' : r.deadline ? `<span class="tagchip dl">마감 ${md(r.deadline)}</span>` : '');
     if (rpOpen.has(r.id)) return `<div class="ri open"><div class="ri-top"><span class="no">${no}</span><b>${esc(r.title)}${tags?`<span class="ri-tags">${tags}</span>`:''}</b><select data-k="${k}status" aria-label="${esc(r.title)} 상태" style="color:${RST_C[st]}">${RST.map(s=>`<option ${st===s?'selected':''}>${s}</option>`).join('')}</select><button class="btn ghost" data-edit data-act="edit" data-col="ritems" data-id="${esc(r.id)}">편집</button><button class="chev" data-act="rp-toggle" data-id="${esc(r.id)}" aria-expanded="true" aria-label="${esc(r.title)} 접기">${CHEV_UP}</button></div><div class="ri-body"><div class="ri-grid"><label for="ri-d-${esc(r.id)}">완료 범위<textarea id="ri-d-${esc(r.id)}" rows="3" data-k="${k}done" placeholder="어디까지 끝났는지">${esc(r.done||'')}</textarea></label><label for="ri-l-${esc(r.id)}">남은 작업<textarea id="ri-l-${esc(r.id)}" rows="3" data-k="${k}left" placeholder="남은 일과 막힌 부분">${esc(r.left||'')}</textarea></label></div><div class="ri-meta"><label for="ri-n-${esc(r.id)}">추가 소요일 <input id="ri-n-${esc(r.id)}" type="number" min="0" step="0.5" data-k="${k}days" value="${esc(r.days||'')}" placeholder="0" style="width:68px"> 일</label><label for="ri-e-${esc(r.id)}">완료 예정일 <input id="ri-e-${esc(r.id)}" type="date" data-k="${k}eta" value="${esc(r.eta||'')}"></label>${editedLine(r)}</div></div></div>`;
     return `<div class="ri"><button class="ri-row" data-act="rp-toggle" data-id="${esc(r.id)}" aria-expanded="false"><span class="no">${no}</span><span class="t"><span class="tt">${esc(r.title)}</span><small>${esc(sum)}${r.eta?' · '+md(r.eta)+' 예정':''}</small>${tags?`<span class="ri-tags">${tags}</span>`:''}</span><span class="pill" style="--c:${RST_C[st]}">${st}</span>${CHEV_DN}</button></div>` }).join('');
   const dn = items.filter(r => r.status === '완료').length, latest = items.map(r => r.eta).filter(Boolean).sort().pop();
@@ -896,40 +908,122 @@ function renderReports(){
   $('report-list').innerHTML = `<div class="rtabs">${tabs}</div><div class="rwrap"><div class="rlist">${list || `<div class="empty" style="border:0">${esc(p.name)}님의 보고 항목이 아직 없어요.</div>`}<div class="ri-add" data-edit><button class="btn dashed" data-act="new" data-col="ritems" data-preset='${JSON.stringify({pid, status:'진행 전', done:'', left:'', days:'', eta:''})}'>+ 보고 항목 추가</button></div></div>${aside}</div>`;
 }
 
-// ---------- assets ----------
-function aFiltered(){
-  const q = ui.q.toLowerCase();
-  return S.assets.filter(a => (ui.kind==='all'||a.kind===ui.kind) && (!ui.astatus||(a.status||'미보고')===ui.astatus) && (ui.aowner==='*'||(a.owner||'')===ui.aowner) && (!q || [a.code,a.title,a.brief,a.need,a.file,a.memo].join(' ').toLowerCase().includes(q))).sort(byOrder);
+// ---------- project discussions ----------
+const SEC_KIND = {tasks:'할 일', check:'체크리스트', timeline:'일정', production:'제작 리스트'};
+const T = (title, extra) => ({title, ...(extra || {})});
+const TEMPLATES = [
+  {id:'live', name:'라이브 방송 제작 분담', desc:'방송 콘티를 기준으로 영상·그래픽·운영 자료를 나눠 맡고 진행 상태를 봐요.', secs:[
+    {key:'items', type:'production', title:'제작·분담 리스트', seed:[T('오프닝 티저 영상',{kind:'video'}),T('제품 디테일 영상',{kind:'video'}),T('착용·시연 영상',{kind:'video'}),T('라이브 혜택·쿠폰 안내',{kind:'graphic'}),T('가격표',{kind:'graphic'}),T('사이즈 비교',{kind:'graphic'}),T('방송 종료 카드',{kind:'graphic'}),T('쿠폰 설정·결제 테스트',{kind:'ops'}),T('진행자 Q&A·큐시트',{kind:'ops'}),T('송출 테스트',{kind:'ops'})]},
+    {key:'tasks', type:'tasks', title:'준비 일정', seed:[T('방송일·시간 확정'),T('콘티 작성'),T('제작 분담 확정'),T('리허설')]}]},
+  {id:'funding', name:'크라우드펀딩·입점 준비', desc:'텀블벅·와디즈 같은 플랫폼 입점 서류와 등록·심사 일정을 챙겨요.', secs:[
+    {key:'prep', type:'check', title:'준비 체크리스트', seed:[T('창작자·사업자 정보',{body:'진행 주체, 프로필, 본인인증, 사업자등록증'}),T('정산 계좌·발행 정보',{body:'계좌·통장 사본, 예금주 일치, 세금계산서 정보'}),T('기본 정보·대표 이미지',{body:'제목·소개, 카테고리·태그, 대표 이미지 가이드'}),T('제품·브랜드 설명',{body:'브랜드 철학, 소재·규격, 실물 사진'}),T('선물·옵션 구성표',{body:'후원 금액별 구성, 옵션, 예상 발송일'}),T('목표금액·예산·일정',{body:'목표금액 근거, 세부 예산, 발송 계획'}),T('신뢰·안전·후원 정책',{body:'지연·불량 대응, 문의 경로, 필수 표시 사항'}),T('심사 제출 전 교차 검수',{body:'사양·이미지·옵션·금액·일정 일치 확인'})]},
+    {key:'roadmap', type:'timeline', title:'실행 로드맵', seed:[T('',{period:'1주차',todo:'자료 취합·누락 목록 정리'}),T('',{period:'2주차',todo:'상세페이지·옵션 등록, 심사 제출'}),T('',{period:'3주차',todo:'심사 보완·재제출'}),T('',{period:'오픈 전',todo:'최종 점검·공개일 설정',final:true})]}]},
+  {id:'promo', name:'프로모션·이벤트', desc:'할인·쿠폰 행사의 혜택 설계부터 세팅, 홍보, 결과 확인까지 챙겨요.', secs:[
+    {key:'check', type:'check', title:'준비 체크리스트', seed:[T('목표·KPI 정하기'),T('기간·대상 상품 확정'),T('혜택·쿠폰 설계'),T('상품·쿠폰 세팅'),T('프로모션 페이지 제작'),T('CRM·SNS 홍보'),T('광고 집행'),T('결과 리포트')]},
+    {key:'tasks', type:'tasks', title:'할 일'}]},
+  {id:'ads', name:'광고 캠페인', desc:'META·네이버 등 광고의 전략, 소재, 세팅, 성과 확인을 나눠 맡아요.', secs:[
+    {key:'tasks', type:'tasks', title:'할 일', seed:[T('전략·예산안'),T('타깃·오디언스 설정'),T('소재 기획'),T('소재 제작'),T('광고 세팅'),T('집행·모니터링'),T('성과 리포트')]},
+    {key:'kpi', type:'check', title:'예산·목표 지표', seed:[T('일 예산',{body:'메모 칸에 금액을 적어요'}),T('집행 기간'),T('목표 ROAS'),T('목표 CPA·전환 수')]}]},
+  {id:'detail', name:'상세페이지 제작', desc:'제품별 촬영·카피·디자인·검수·업로드 단계를 맡아서 진행해요.', secs:[
+    {key:'tasks', type:'tasks', title:'제작 단계', seed:[T('촬영 컷 리스트'),T('원고·카피'),T('디자인 초안'),T('내부 검수'),T('수정 반영'),T('업로드·노출 확인')]},
+    {key:'spec', type:'check', title:'제품 정보 확인', seed:[T('소재·규격'),T('사이즈·무게'),T('구성품'),T('관리 방법'),T('배송·교환·A/S 안내')]}]},
+  {id:'launch', name:'신제품 런칭', desc:'네이밍부터 패키지, 촬영, 채널 등록, 런칭 프로모션까지 한 번에 봐요.', secs:[
+    {key:'check', type:'check', title:'런칭 체크리스트', seed:[T('네이밍·콘셉트'),T('가격·원가'),T('패키지'),T('제품 촬영'),T('상세페이지'),T('판매 채널 등록'),T('런칭 프로모션'),T('재고·출고 준비')]},
+    {key:'roadmap', type:'timeline', title:'런칭 일정', seed:[T('',{period:'기획',todo:'콘셉트·가격 확정'}),T('',{period:'제작',todo:'패키지·샘플 확인'}),T('',{period:'콘텐츠',todo:'촬영·상세페이지'}),T('',{period:'런칭',todo:'채널 오픈·프로모션',final:true})]}]},
+  {id:'shoot', name:'촬영', desc:'제품·모델 촬영의 콘셉트, 섭외, 준비물, 보정·납품 일정을 챙겨요.', secs:[
+    {key:'check', type:'check', title:'촬영 준비', seed:[T('콘셉트·무드보드'),T('촬영 컷 리스트'),T('장소·스튜디오'),T('모델 섭외'),T('소품·의상'),T('촬영 일정·인원'),T('보정·납품 일정')]},
+    {key:'tasks', type:'tasks', title:'할 일'}]},
+  {id:'collab', name:'인플루언서·공구 협업', desc:'협업자별 진행 상황과 제품 발송, 게시 확인을 관리해요.', secs:[
+    {key:'tasks', type:'tasks', title:'협업자별 진행', seed:[T('[협업자 이름] · 조건 확정')]},
+    {key:'check', type:'check', title:'공통 확인', seed:[T('협업 조건·단가'),T('제품 발송'),T('콘텐츠 가이드'),T('게시 확인'),T('성과 집계')]}]},
+  {id:'crm', name:'CRM 메시지 발송', desc:'카카오·문자 메시지의 대상, 문구, 이미지, 발송, 성과를 챙겨요.', secs:[
+    {key:'check', type:'check', title:'발송 체크리스트', seed:[T('발송 대상(세그먼트)'),T('메시지 기획·문구'),T('이미지 제작'),T('링크·쿠폰 확인'),T('테스트 발송'),T('발송 일정'),T('성과 확인')]},
+    {key:'tasks', type:'tasks', title:'할 일'}]},
+  {id:'popup', name:'팝업·오프라인 행사', desc:'장소, 공간 구성, 인력, 재고, 현장 이벤트, 철수까지 준비해요.', secs:[
+    {key:'check', type:'check', title:'준비 체크리스트', seed:[T('장소·기간 확정'),T('공간 디자인·집기'),T('운영 인력·근무표'),T('재고·VMD'),T('결제·POS'),T('현장 이벤트'),T('홍보 일정'),T('철수')]},
+    {key:'roadmap', type:'timeline', title:'행사 일정', seed:[T('',{period:'준비',todo:'계약·디자인·발주'}),T('',{period:'설치',todo:'집기·VMD 세팅'}),T('',{period:'운영',todo:'현장 운영·일일 정산',final:true}),T('',{period:'철수',todo:'철수·재고 회수'})]}]},
+  {id:'blank', name:'빈 프로젝트', desc:'할 일 칸만 있는 빈 틀이에요. 자유롭게 채워요.', secs:[{key:'tasks', type:'tasks', title:'할 일'}]}
+];
+const TPL = Object.fromEntries(TEMPLATES.map(t => [t.id, t]));
+const projSecs = pj => (pj && pj.secs && pj.secs.length) ? pj.secs : ((TPL[pj && pj.template] || TPL.blank).secs.map(({key, type, title}) => ({key, type, title})));
+const itemsIn = (proj, sec) => S.pitems.filter(x => x.proj === proj && x.sec === sec).sort(byOrder);
+function secTypeOf(it){ const pj = S.projects.find(x => x.id === it.proj); const sc = projSecs(pj).find(x => x.key === it.sec); return sc ? sc.type : 'tasks' }
+function pitemLine(id){ const x = S.pitems.find(o => o.id === id); if (!x || secTypeOf(x) !== 'tasks') return null; return {id: x.id, text: x.title || '', owner: x.owner || '', due: x.due || '', always: !!x.always, proj: x.proj, order: x.order || 0, links: x.links} }
+let pclosed = new Set(); try { pclosed = new Set(JSON.parse(localStorage.getItem('istar.meeting.pclosed') || '[]')) } catch {}
+const pfilt = {};
+function secDone(type, its){ if (type === 'tasks') return its.filter(x => x.status === '완료').length; if (type === 'check') return its.filter(x => x.state === '완료').length; if (type === 'timeline') return its.filter(x => x.done).length; return its.filter(x => x.status === '완료').length }
+function taskRow(x, i){
+  const k = `pitems|${esc(x.id)}|`, o = PEOPLE[x.owner], pc = o ? o.c : x.owner === 'all' ? 'var(--green)' : '', st = x.status || '진행 전';
+  return `<div class="al" style="--b:${RST_C[st]}"><div class="al-main">
+  <textarea class="al-text" rows="1" id="pi-t-${esc(x.id)}" data-k="${k}title" placeholder="할 일을 적어 주세요" aria-label="할 일">${esc(x.title || '')}</textarea>
+  <div class="al-meta">
+    <select class="${pc ? 'has' : ''}" style="${pc ? `--pc:${pc}` : ''}" data-k="${k}owner" aria-label="담당자">${OWN_OPTS.map(([v, n]) => `<option value="${v}" ${(x.owner || '') === v ? 'selected' : ''}>${v === '' ? '담당자 지정' : n}</option>`).join('')}</select>
+    <input type="date" class="${x.due && !x.always ? 'has' : ''}" data-k="${k}due" value="${esc(x.due || '')}" aria-label="데드라인" ${x.always ? 'disabled' : ''}>
+    <label class="chk ${x.always ? 'on' : ''}"><input type="checkbox" data-k="${k}always" ${x.always ? 'checked' : ''}> 상시</label>
+    <select class="st" data-k="${k}status" aria-label="상태" style="color:${RST_C[st]}">${RST.map(v => `<option ${st === v ? 'selected' : ''}>${v}</option>`).join('')}</select>
+  </div></div>
+  <button class="x" type="button" data-edit data-act="pi-del" data-id="${esc(x.id)}" aria-label="이 줄 삭제">✕</button></div>`;
 }
-function renderAssetTools(){
-  const cnt = k => S.assets.filter(a=>k==='all'||a.kind===k).length;
-  $('kind-chips').innerHTML = [['all','전체'],...Object.entries(KINDS)].map(([k,l])=>`<button class="chip ${ui.kind===k?'on':''}" data-act="kind" data-v="${k}" aria-pressed="${ui.kind===k}">${l} <span class="mono">${cnt(k)}</span></button>`).join('');
-  const sv = $('f-astatus').value; $('f-astatus').innerHTML = `<option value="">모든 상태</option>` + ASTATUS.map(s=>`<option ${ui.astatus===s?'selected':''}>${s}</option>`).join('');
-  $('f-aowner').innerHTML = `<option value="*">모든 담당</option>` + AOWNERS.map(([v,l])=>`<option value="${v}" ${ui.aowner===v?'selected':''}>${l}</option>`).join('');
+function renderSec(pj, sc){
+  const its = itemsIn(pj.id, sc.key), add = `<button class="btn ghost" type="button" data-edit data-act="pi-add" data-id="${esc(pj.id)}" data-sec="${esc(sc.key)}">+ 추가</button>`;
+  const head = `<div class="psec-head"><h4>${esc(sc.title)}<small>${SEC_KIND[sc.type]} · 완료 ${secDone(sc.type, its)}/${its.length}</small></h4>${add}</div>`;
+  if (sc.type === 'tasks') return `<div class="psec">${head}<div class="al-list">${its.length ? its.map(taskRow).join('') : '<div class="al-empty">아직 할 일이 없어요.</div>'}</div></div>`;
+  if (sc.type === 'check') return `<div class="psec">${head}<div class="prep">${its.length ? its.map((x, i) => `<article class="card pp ${x.state === '완료' ? 'st-done' : x.state === '누락 있음' ? 'st-miss' : ''}"><div class="top"><span class="no">${String(i + 1).padStart(2, '0')}</span><h3>${esc(x.title)}</h3><button class="btn ghost" data-edit data-act="edit" data-col="pitems" data-id="${esc(x.id)}">편집</button></div>${x.body ? `<p>${esc(x.body)}</p>` : ''}<div class="row"><select data-k="pitems|${esc(x.id)}|state" aria-label="${esc(x.title)} 상태" style="color:${PREP_C[x.state || '미확인']}">${PREP_STATES.map(v => `<option ${(x.state || '미확인') === v ? 'selected' : ''}>${v}</option>`).join('')}</select><input type="text" data-k="pitems|${esc(x.id)}|memo" placeholder="메모" value="${esc(x.memo || '')}" aria-label="${esc(x.title)} 메모"></div></article>`).join('') : '<div class="al-empty">아직 항목이 없어요.</div>'}</div></div>`;
+  if (sc.type === 'timeline') return `<div class="psec">${head}<div class="tablewrap" style="margin-top:0"><table><thead><tr><th>기간</th><th>해야 할 일</th><th>담당</th><th>완료 기준</th><th>완료</th><th></th></tr></thead><tbody>${its.length ? its.map(r => `<tr class="${r.final ? 'final' : ''} ${r.done ? 'isdone' : ''}"><td class="per">${esc(r.period)}</td><td><div class="pre">${esc(r.todo)}</div></td><td><div class="pre">${esc(r.owner)}</div></td><td><div class="pre">${esc(r.criteria)}</div></td><td><label class="chk"><input type="checkbox" data-k="pitems|${esc(r.id)}|done" ${r.done ? 'checked' : ''} aria-label="${esc(r.period)} 완료">완료</label></td><td class="acts"><button class="btn ghost" data-edit data-act="edit" data-col="pitems" data-id="${esc(r.id)}">편집</button></td></tr>`).join('') : '<tr><td colspan="6" class="empty">아직 일정이 없어요.</td></tr>'}</tbody></table></div></div>`;
+  // production list
+  const f = pfilt[pj.id] || {kind: 'all', q: ''}, q = f.q.toLowerCase();
+  const rows = its.filter(a => (f.kind === 'all' || a.kind === f.kind) && (!q || [a.code, a.title, a.brief, a.need, a.file, a.memo].join(' ').toLowerCase().includes(q)));
+  const total = its.length || 1, counts = ASTATUS.map(v => [v, its.filter(a => (a.status || '미보고') === v).length]);
+  const tools = `<div class="card progress"><div class="bar" role="img" aria-label="상태별 작업 수">${counts.filter(([, n]) => n).map(([v, n]) => `<i style="--c:${ASTATUS_C[v]};width:${n / total * 100}%" title="${v} ${n}"></i>`).join('')}</div><div class="legend">${counts.map(([v, n]) => `<span><i class="dot" style="--b:${ASTATUS_C[v]}"></i>${v} <b>${n}</b></span>`).join('')}<span style="margin-left:auto">총 <b>${its.length}</b>개</span></div></div><div class="pfilter">${[['all', '전체'], ...Object.entries(KINDS)].map(([v, l]) => `<button class="chip ${f.kind === v ? 'on' : ''}" type="button" data-act="pk" data-id="${esc(pj.id)}" data-v="${v}" aria-pressed="${f.kind === v}">${l} <span class="mono">${its.filter(a => v === 'all' || a.kind === v).length}</span></button>`).join('')}<input type="text" class="pq" data-id="${esc(pj.id)}" value="${esc(f.q)}" placeholder="ID·작업명·내용 검색" aria-label="제작 리스트 검색"></div>`;
+  const list = rows.length ? rows.map(a => { const k = `pitems|${esc(a.id)}|`, st = a.status || '미보고';
+    return `<article class="arow ${st === '완료' ? 'done' : ''}"><div class="aid"><span class="code k-${esc(a.kind || 'graphic')}">${esc(a.code || '—')}</span><h3>${esc(a.title)}</h3>${a.cue ? `<span class="cue">${a.kind === 'ops' ? '적용 자료' : '사용 시점'} <span class="mono">${esc(a.cue)}</span></span>` : ''}<span class="cue">자료 마감 <span class="mono">${esc(a.due || '—')}</span> · ${esc(KINDS[a.kind] || '')}</span></div>
+    <div style="min-width:0">${a.brief ? `<p class="brief">${esc(a.brief)}</p>` : '<p class="brief edited">제작 내용을 적어 주세요 (편집)</p>'}${a.state || a.screen || a.need || a.file || a.extra || a.source ? `<details class="more"><summary>제작 지시·필요 자료·출처</summary><dl>${a.state ? `<dt>준비 상태</dt><dd>${esc(a.state)}</dd>` : ''}${a.screen ? `<dt>화면·음향</dt><dd>${esc(a.screen)}</dd>` : ''}${a.need ? `<dt>선행 확인</dt><dd>${esc(a.need)}</dd>` : ''}${a.file ? `<dt>납품 형태</dt><dd>${esc(a.file)}</dd>` : ''}${a.extra ? `<dt>메모</dt><dd>${esc(a.extra)}</dd>` : ''}${a.source ? `<dt>근거</dt><dd>${esc(a.source)}</dd>` : ''}</dl></details>` : ''}</div>
+    <div class="ctl"><label for="ao-${esc(a.id)}">세부 담당<select id="ao-${esc(a.id)}" data-k="${k}owner">${AOWNERS.map(([v, l]) => `<option value="${v}" ${(a.owner || '') === v ? 'selected' : ''}>${l}</option>`).join('')}</select></label><label for="as-${esc(a.id)}">상태<select id="as-${esc(a.id)}" data-k="${k}status">${ASTATUS.map(v => `<option ${st === v ? 'selected' : ''}>${v}</option>`).join('')}</select></label><label for="ah-${esc(a.id)}">예상 시간<input id="ah-${esc(a.id)}" type="number" min="0" step="0.5" placeholder="시간" data-k="${k}hours" value="${esc(a.hours || '')}"></label><label for="ad-${esc(a.id)}">자료 마감<input id="ad-${esc(a.id)}" type="text" data-k="${k}due" value="${esc(a.due || '')}"></label><label class="wide" for="am-${esc(a.id)}">작업 메모<textarea id="am-${esc(a.id)}" rows="2" data-k="${k}memo" placeholder="원본 위치·지원·확정일">${esc(a.memo || '')}</textarea></label><div class="meta">${editedLine(a) || '<span></span>'}<button class="btn ghost" data-edit data-act="edit" data-col="pitems" data-id="${esc(a.id)}">편집 · 삭제</button></div></div></article>` }).join('') : `<div class="empty">${its.length ? '조건에 맞는 작업이 없어요.' : '아직 작업이 없어요. ‘+ 추가’로 시작하세요.'}</div>`;
+  return `<div class="psec">${head}${tools}<div class="assets">${list}</div></div>`;
 }
-function renderAssets(){
-  renderAssetTools();
-  const total = S.assets.length || 1;
-  const counts = ASTATUS.map(s=>[s,S.assets.filter(a=>(a.status||'미보고')===s).length]);
-  $('asset-progress').innerHTML = `<div class="bar" role="img" aria-label="상태별 작업 수">${counts.filter(([,n])=>n).map(([s,n])=>`<i style="--c:${ASTATUS_C[s]};width:${n/total*100}%" title="${s} ${n}"></i>`).join('')}</div><div class="legend">${counts.map(([s,n])=>`<span><i class="dot" style="--b:${ASTATUS_C[s]}"></i>${s} <b>${n}</b></span>`).join('')}<span style="margin-left:auto">총 <b>${S.assets.length}</b>개 · 최종 마감 <b>11.20</b></span></div>`;
-  const rows = aFiltered();
-  $('asset-list').innerHTML = rows.length ? rows.map(a => { const k = `assets|${esc(a.id)}|`, st = a.status||'미보고';
-    return `<article class="arow ${st==='완료'?'done':''}"><div class="aid"><span class="code k-${esc(a.kind)}">${esc(a.code||'—')}</span><h3>${esc(a.title)}</h3><span class="cue">${a.kind==='ops'?'적용 자료':'방송 경과시각'} <span class="mono">${esc(a.cue||'—')}</span></span><span class="cue">자료 마감 <span class="mono">${esc(a.due||'—')}</span> · ${esc(KINDS[a.kind]||'')}</span></div>
-    <div style="min-width:0"><p class="brief">${esc(a.brief)}</p><details class="more"><summary>제작 지시·필요 자료·출처</summary><dl>${a.state?`<dt>준비 상태</dt><dd>${esc(a.state)}</dd>`:''}${a.screen?`<dt>화면·음향</dt><dd>${esc(a.screen)}</dd>`:''}${a.need?`<dt>선행 확인</dt><dd>${esc(a.need)}</dd>`:''}${a.file?`<dt>납품 형태</dt><dd>${esc(a.file)}</dd>`:''}${a.extra?`<dt>메모</dt><dd>${esc(a.extra)}</dd>`:''}${a.source?`<dt>콘티 근거</dt><dd>${esc(a.source)}</dd>`:''}</dl></details></div>
-    <div class="ctl"><label for="ao-${esc(a.id)}">세부 담당<select id="ao-${esc(a.id)}" data-k="${k}owner">${AOWNERS.map(([v,l])=>`<option value="${v}" ${(a.owner||'')===v?'selected':''}>${l}</option>`).join('')}</select></label><label for="as-${esc(a.id)}">상태<select id="as-${esc(a.id)}" data-k="${k}status">${ASTATUS.map(s=>`<option ${st===s?'selected':''}>${s}</option>`).join('')}</select></label><label for="ah-${esc(a.id)}">예상 시간<input id="ah-${esc(a.id)}" type="number" min="0" step="0.5" placeholder="시간" data-k="${k}hours" value="${esc(a.hours||'')}"></label><label for="ad-${esc(a.id)}">자료 마감<input id="ad-${esc(a.id)}" type="text" data-k="${k}due" value="${esc(a.due||'')}"></label><label class="wide" for="am-${esc(a.id)}">작업 메모<textarea id="am-${esc(a.id)}" rows="2" data-k="${k}memo" placeholder="원본 위치·지원·확정일">${esc(a.memo||'')}</textarea></label><div class="meta">${editedLine(a)||'<span></span>'}<button class="btn ghost" data-edit data-act="edit" data-col="assets" data-id="${esc(a.id)}">편집 · 삭제</button></div></div></article>` }).join('') : `<div class="empty">${S.assets.length?'조건에 맞는 작업이 없어요.':E('assets','작업 항목이 아직 없어요. ‘+ 작업 추가’로 시작하세요.')}</div>`;
+function renderProjects(){
+  const list = [...S.projects].sort(byOrder);
+  $('proj-list').innerHTML = list.length ? list.map(pj => { const secs = projSecs(pj), open = !pclosed.has(pj.id), tp = TPL[pj.template];
+    const sum = secs.map(sc => { const its = itemsIn(pj.id, sc.key); return `<span>${esc(sc.title)} <b>${secDone(sc.type, its)}/${its.length}</b></span>` }).join('');
+    return `<article class="card proj ${open ? 'open' : ''}"><div class="proj-head"><button class="chev" type="button" data-act="proj-toggle" data-id="${esc(pj.id)}" aria-expanded="${open}" aria-label="${esc(pj.title)} ${open ? '접기' : '펼치기'}">${open ? CHEV_UP : CHEV_DN}</button><h3>${esc(pj.title)}</h3>${tp ? `<span class="tpl-chip">${esc(tp.name)}</span>` : ''}<span class="proj-sum">${sum}</span><span class="proj-acts">${secs.some(sc => sc.type === 'production') ? `<button class="btn ghost" type="button" data-act="proj-csv" data-id="${esc(pj.id)}" data-dl ${dl ? '' : 'hidden'}>CSV</button>` : ''}<button class="btn ghost" type="button" data-edit data-act="edit" data-col="projects" data-id="${esc(pj.id)}">편집</button></span></div>
+    ${open ? `<div class="proj-body">${pj.note ? `<p class="proj-note">${esc(pj.note)}</p>` : ''}${secs.map(sc => renderSec(pj, sc)).join('')}${editedLine(pj)}</div>` : ''}</article>` }).join('')
+    : `<div class="empty">${E('projects', '이번 회의에서 논의할 프로젝트가 없어요. ‘+ 프로젝트 추가’로 템플릿을 골라 시작하세요.')}</div>`;
+  if (!CSS.supports('field-sizing', 'content')) document.querySelectorAll('#proj-list .al-text').forEach(el => { el.style.height = 'auto'; el.style.height = el.scrollHeight + 'px' });
 }
-$('f-astatus').addEventListener('change', e=>{ui.astatus=e.target.value; mark('assets')});
-$('f-aowner').addEventListener('change', e=>{ui.aowner=e.target.value; mark('assets')});
-$('f-asearch').addEventListener('input', e=>{ui.q=e.target.value.trim(); mark('assets')});
-
-// ---------- tumblbug ----------
-function renderPrep(){
-  const list = [...S.prep].sort(byOrder);
-  $('prep-list').innerHTML = list.length ? list.map((p,i) => `<article class="card pp ${p.state==='완료'?'st-done':p.state==='누락 있음'?'st-miss':''}"><div class="top"><span class="no">${String(i+1).padStart(2,'0')}</span><h3>${esc(p.title)}</h3><button class="btn ghost" data-edit data-act="edit" data-col="prep" data-id="${esc(p.id)}">편집</button></div><p>${esc(p.body)}</p><div class="row"><select data-k="prep|${esc(p.id)}|state" aria-label="${esc(p.title)} 준비 상태" style="color:${PREP_C[p.state]||'inherit'}">${PREP_STATES.map(s=>`<option ${p.state===s?'selected':''}>${s}</option>`).join('')}</select><input type="text" data-k="prep|${esc(p.id)}|memo" placeholder="누락 항목·등록 가능일" value="${esc(p.memo||'')}" aria-label="${esc(p.title)} 메모"></div>${editedLine(p)}</article>`).join('') : `<div class="empty">${E('prep','준비 항목이 없어요.')}</div>`;
+document.addEventListener('input', e => { const el = e.target; if (!el.classList || !el.classList.contains('pq')) return; const id = el.dataset.id; pfilt[id] = {...(pfilt[id] || {kind: 'all'}), q: el.value.trim()}; renderProjects(); const n = document.querySelector(`.pq[data-id="${CSS.escape(id)}"]`); if (n) { n.focus(); n.setSelectionRange(n.value.length, n.value.length) } });
+async function addPitem(proj, sec){
+  const pj = S.projects.find(x => x.id === proj), sc = projSecs(pj).find(x => x.key === sec);
+  if (!sc) return;
+  if (sc.type !== 'tasks') return openEditor('pitems', null, {proj, sec, ...(sc.type === 'check' ? {state: '미확인'} : sc.type === 'production' ? {kind: 'graphic', status: '미보고', owner: ''} : {})});
+  const its = itemsIn(proj, sec), order = Math.max(0, ...its.map(x => x.order || 0)) + 1, id = db.collection('pitems').doc().id;
+  focusNext = 'pi-t-' + id;
+  try { await write('pitems', id, {proj, sec, order, title: '', owner: '', due: '', always: false, status: '진행 전', createdAt: Date.now()}, 'set') } catch {}
 }
-function renderRoadmap(){
-  const list = [...S.roadmap].sort(byOrder);
-  $('roadmap-list').innerHTML = list.length ? list.map(r => `<tr class="${r.final?'final':''} ${r.done?'isdone':''}"><td class="per">${esc(r.period)}</td><td><div class="pre">${esc(r.todo)}</div></td><td><div class="pre">${esc(r.owner)}</div></td><td><div class="pre">${esc(r.criteria)}</div></td><td><label class="chk"><input type="checkbox" data-k="roadmap|${esc(r.id)}|done" ${r.done?'checked':''} aria-label="${esc(r.period)} 완료">완료</label></td><td class="acts"><button class="btn ghost" data-edit data-act="edit" data-col="roadmap" data-id="${esc(r.id)}">편집</button></td></tr>`).join('') : `<tr><td colspan="6" class="empty">${E('roadmap','로드맵 단계가 없어요.')}</td></tr>`;
+async function deletePitem(id, mt = cur){
+  try { await db.collection('pitems', mt).doc(id).delete(); await syncLine(id, mt, true) } catch (e) { handleWriteError(e) }
+}
+function openTemplatePicker(){
+  if (readOnly) return;
+  lastFocus = document.activeElement;
+  let pick = 'live';
+  const card = t => `<button type="button" class="tpl ${t.id === pick ? 'on' : ''}" data-act="tpl-pick" data-v="${t.id}" aria-pressed="${t.id === pick}"><b>${esc(t.name)}</b><small>${esc(t.desc)}</small><span class="secs">${t.secs.map(sc => `<i>${esc(sc.title)}${sc.seed && sc.seed.length ? ' ' + sc.seed.length : ''}</i>`).join('')}</span></button>`;
+  modal = {col: 'projects', picker: true, fields: []};
+  $('modal-root').innerHTML = `<div class="scrim" data-act="scrim"><div class="modal wide" role="dialog" aria-modal="true" aria-labelledby="mt"><header><h2 id="mt">프로젝트 추가 · 템플릿 고르기</h2><button class="btn ghost" data-act="close" aria-label="닫기">✕</button></header><form id="mform" novalidate><div class="tpls" id="tpls">${TEMPLATES.map(card).join('')}</div><label class="fld wide" for="tpl-title"><span>프로젝트 이름</span><input id="tpl-title" type="text" value="${esc(TPL[pick].name)}" required><small>예: L4K3 라방 제작 분담 · 베일린 텀블벅 입점 준비</small></label><label class="fld wide" for="tpl-note"><span>메모 (선택)</span><textarea id="tpl-note" rows="2" placeholder="이번 회의에서 논의할 내용, 확정 마감 등"></textarea></label><p class="msg" id="mmsg" hidden></p></form><footer><span class="edited">템플릿의 체크리스트·일정 틀이 함께 만들어져요. 만든 뒤 자유롭게 고치고 지울 수 있어요.</span><div class="r"><button class="btn" type="button" data-act="close">취소</button><button class="btn primary" type="submit" form="mform">만들기</button></div></footer></div></div>`;
+  let touched = false;
+  $('tpl-title').addEventListener('input', () => { touched = true });
+  $('tpls').addEventListener('click', e => { const b = e.target.closest('[data-act=tpl-pick]'); if (!b) return; e.stopPropagation(); pick = b.dataset.v; $('tpls').innerHTML = TEMPLATES.map(card).join(''); if (!touched) $('tpl-title').value = TPL[pick].name });
+  $('mform').addEventListener('submit', async e => { e.preventDefault(); const title = $('tpl-title').value.trim(); if (!title) { const m = $('mmsg'); m.hidden = false; m.textContent = '프로젝트 이름을 입력해 주세요.'; return }
+    const btn = document.querySelector('.modal button[type=submit]'); btn.disabled = true;
+    try { await createProject(pick, title, $('tpl-note').value.trim()); closeModal(); toast(`‘${title}’ 프로젝트를 추가했어요.`) } catch { btn.disabled = false; toast('만들지 못했어요. 다시 시도해 주세요.') } });
+  $('tpl-title').focus();
+}
+async function createProject(tid, title, note){
+  const tp = TPL[tid] || TPL.blank, mt = cur;
+  const id = db.collection('projects').doc().id, order = Math.max(0, ...S.projects.map(x => x.order || 0)) + 1;
+  await write('projects', id, {template: tid, title, note, order, secs: tp.secs.map(({key, type, title}) => ({key, type, title})), createdAt: Date.now()}, 'set', mt);
+  for (const sc of tp.secs) { let n = 0; for (const sd of (sc.seed || [])) { n++;
+    const base = sc.type === 'tasks' ? {owner: '', due: '', always: false, status: '진행 전'} : sc.type === 'check' ? {state: '미확인', memo: '', body: ''} : sc.type === 'timeline' ? {owner: '', criteria: '', done: false, final: false} : {status: '미보고', owner: '', code: '', brief: '', due: ''};
+    await write('pitems', db.collection('pitems').doc().id, {proj: id, sec: sc.key, order: n, ...base, ...sd}, 'set', mt) } }
 }
 
 // ---------- brand status ----------
@@ -991,7 +1085,7 @@ function renderFeed(){
   all.sort((a,b)=>b.d.updatedAt-a.d.updatedAt);
   $('feed').innerHTML = all.length ? all.slice(0,8).map(x=>`<li>${x.d.updatedBy?`<b>${who(x.d)}</b>님이 `:''}${COL_LABEL[x.c]} <b>${esc(x.label)}</b> 수정 <span class="t">${ago(x.d.updatedAt)}</span></li>`).join('') : '<li>아직 변경 기록이 없어요.</li>';
 }
-setInterval(()=>{ if (S.tasks.length || S.assets.length) renderFeed(), fillNames() }, 60000);
+setInterval(()=>{ if (S.tasks.length || S.pitems.length) renderFeed(), fillNames() }, 60000);
 
 // ---------- modal ----------
 const F = {
@@ -1004,30 +1098,25 @@ const F = {
     {k:'start',l:'시작일',t:'date',show:'range'},{k:'end',l:'종료(마감)일',t:'date',show:'range'},
     {k:'month',l:'진행 월',t:'month',show:'month'},{k:'endMonth',l:'넘어갈 수 있는 월',t:'month',show:'month'},
     {k:'dateLabel',l:'일정 설명',t:'text',w:1,ph:'예: 11.20(금)까지 · 마감 엄수'},{k:'notes',l:'세부 내용',t:'textarea',w:1,rows:4}],
-  assets: () => [
-    {k:'code',l:'작업 ID',t:'text',ph:'예: G14'},{k:'kind',l:'구분',t:'select',o:Object.entries(KINDS)},
-    {k:'title',l:'작업명',t:'text',w:1,req:1},{k:'brief',l:'제작 내용·완료 기준',t:'textarea',w:1},
-    {k:'screen',l:'화면·음향',t:'textarea',w:1},{k:'need',l:'선행 확인',t:'textarea',w:1,rows:2},
-    {k:'cue',l:'사용 시점',t:'text'},{k:'due',l:'자료 마감',t:'text',ph:'11.20'},
-    {k:'state',l:'준비 상태',t:'text'},{k:'file',l:'납품 형태·파일명',t:'text'},
-    {k:'source',l:'콘티 근거',t:'text'},{k:'owner',l:'세부 담당',t:'select',o:AOWNERS},
-    {k:'status',l:'상태',t:'select',o:ASTATUS.map(s=>[s,s])},{k:'hours',l:'예상 시간',t:'number'},
-    {k:'extra',l:'제작 메모',t:'textarea',w:1,rows:2}],
+  projects: () => [{k:'title',l:'프로젝트 이름',t:'text',w:1,req:1},{k:'note',l:'메모',t:'textarea',w:1,rows:4,help:'이번 회의에서 논의할 내용, 확정 마감 등'}],
+  pitems: d => { const ty = secTypeOf(d);
+    if (ty === 'check') return [{k:'title',l:'항목',t:'text',w:1,req:1},{k:'body',l:'확인할 내용',t:'textarea',w:1,rows:3},{k:'state',l:'상태',t:'select',o:PREP_STATES.map(s=>[s,s])},{k:'memo',l:'메모',t:'text'}];
+    if (ty === 'timeline') return [{k:'period',l:'기간',t:'text',req:1,ph:'예: 11.19–25'},{k:'final',l:'확정 마감 강조',t:'checkbox'},{k:'todo',l:'해야 할 일',t:'textarea',w:1,rows:3},{k:'owner',l:'담당',t:'textarea',w:1,rows:2,help:'줄바꿈으로 구분'},{k:'criteria',l:'완료 기준',t:'textarea',w:1,rows:2},{k:'done',l:'완료',t:'checkbox'}];
+    if (ty === 'production') return [{k:'code',l:'작업 ID',t:'text',ph:'예: G14'},{k:'kind',l:'구분',t:'select',o:Object.entries(KINDS)},{k:'title',l:'작업명',t:'text',w:1,req:1},{k:'brief',l:'제작 내용·완료 기준',t:'textarea',w:1},{k:'screen',l:'화면·음향',t:'textarea',w:1},{k:'need',l:'선행 확인',t:'textarea',w:1,rows:2},{k:'cue',l:'사용 시점',t:'text'},{k:'due',l:'자료 마감',t:'text',ph:'11.20'},{k:'state',l:'준비 상태',t:'text'},{k:'file',l:'납품 형태·파일명',t:'text'},{k:'source',l:'근거',t:'text'},{k:'owner',l:'세부 담당',t:'select',o:AOWNERS},{k:'status',l:'상태',t:'select',o:ASTATUS.map(s=>[s,s])},{k:'hours',l:'예상 시간',t:'number'},{k:'extra',l:'제작 메모',t:'textarea',w:1,rows:2}];
+    return [{k:'title',l:'할 일',t:'text',w:1,req:1},{k:'owner',l:'담당자',t:'select',o:OWN_OPTS},{k:'status',l:'상태',t:'select',o:RST.map(s=>[s,s])},{k:'due',l:'데드라인',t:'date'},{k:'always',l:'상시',t:'checkbox'}] },
   agenda: d => d.section==='decide' ? [
     {k:'title',l:'논의 사항',t:'text',w:1,req:1},{k:'body',l:'내용',t:'textarea',w:1,rows:4,help:'줄 앞에 - 를 붙이면 목록, **굵게** 표시'},
     {k:'state',l:'진행 상태',t:'select',o:DECIDE_STATES.map(s=>[s,s])},{k:'result',l:'결정 내용',t:'textarea',w:1,rows:3}] : [
     {k:'tag',l:'구분 태그',t:'text',ph:'VAELIN · GEUMEUNMI · L4K3 등'},{k:'title',l:'안건명',t:'text',req:1},
     ...(d.body ? [{k:'body',l:'기존 줄글 내용',t:'textarea',w:1,rows:4,help:'할 일 칸으로 옮긴 뒤 비워 두면 사라져요'}] : []),{k:'note',l:'메모',t:'textarea',w:1,rows:2,help:'할 일은 저장한 뒤 카드에서 칸으로 추가하세요'}],
-  prep: () => [{k:'title',l:'준비 항목',t:'text',w:1,req:1},{k:'body',l:'준비할 내용',t:'textarea',w:1,rows:4},{k:'state',l:'상태',t:'select',o:PREP_STATES.map(s=>[s,s])},{k:'memo',l:'메모',t:'text'}],
-  roadmap: () => [{k:'period',l:'기간',t:'text',req:1,ph:'예: 11.19–25'},{k:'final',l:'확정 마감 강조',t:'checkbox'},{k:'todo',l:'해야 할 일',t:'textarea',w:1,rows:3},{k:'owner',l:'담당',t:'textarea',w:1,rows:3,help:'줄바꿈으로 구분'},{k:'criteria',l:'완료 기준',t:'textarea',w:1,rows:2},{k:'done',l:'완료',t:'checkbox'}],
+  _prep_unused: () => [{k:'title',l:'준비 항목',t:'text',w:1,req:1},{k:'body',l:'준비할 내용',t:'textarea',w:1,rows:4},{k:'state',l:'상태',t:'select',o:PREP_STATES.map(s=>[s,s])},{k:'memo',l:'메모',t:'text'}],
+  _roadmap_unused: () => [{k:'period',l:'기간',t:'text',req:1,ph:'예: 11.19–25'},{k:'final',l:'확정 마감 강조',t:'checkbox'},{k:'todo',l:'해야 할 일',t:'textarea',w:1,rows:3},{k:'owner',l:'담당',t:'textarea',w:1,rows:3,help:'줄바꿈으로 구분'},{k:'criteria',l:'완료 기준',t:'textarea',w:1,rows:2},{k:'done',l:'완료',t:'checkbox'}],
   reports: () => [{k:'items',l:'보고 항목',t:'textarea',w:1,rows:6,help:'한 줄에 한 항목'}],
   ritems: d => [{k:'title',l:'할 일',t:'text',w:1,req:1,ph:'예: 베일린 상세페이지 진행 상황'},{k:'status',l:'상태',t:'select',o:RST.map(x=>[x,x])}, ...(d.lid ? [] : [{k:'deadline',l:'데드라인',t:'date'},{k:'always',l:'상시',t:'checkbox'}])],
   meta_head: () => [{k:'title',l:'회의 제목',t:'text',w:1,req:1},{k:'dateLabel',l:'날짜 표기',t:'text',w:1,ph:'NOVEMBER 05, 2026 · THURSDAY'},{k:'subtitle',l:'소개 문장',t:'textarea',w:1,rows:2}],
   meta_goal: () => [{k:'goal',l:'확정 목표',t:'textarea',w:1,rows:5,help:'첫 줄은 굵게 표시됩니다'}],
-  meta_assets: () => [{k:'assetsNote',l:'제작 리스트 안내',t:'textarea',w:1,rows:6}],
-  meta_tumblbug: () => [{k:'tumblbugNote',l:'텀블벅 일정 안내',t:'textarea',w:1,rows:7}],
 };
-const TITLES = {tasks:'업무',assets:'L4K3 작업',agenda:'회의안 항목',prep:'텀블벅 준비 항목',roadmap:'로드맵 단계',reports:'보고 항목',ritems:'보고 항목',meta:'회의 개요'};
+const TITLES = {tasks:'업무',projects:'프로젝트',pitems:'항목',assets:'L4K3 작업',agenda:'회의안 항목',prep:'텀블벅 준비 항목',roadmap:'로드맵 단계',reports:'보고 항목',ritems:'보고 항목',meta:'회의 개요'};
 let modal = null;
 function closeModal(){ $('modal-root').innerHTML=''; modal=null; if (lastFocus) try{lastFocus.focus()}catch{} }
 let lastFocus = null;
@@ -1044,7 +1133,7 @@ function applyShow(){ const sel = document.getElementById('mf-schedule'); if (!s
 function openEditor(col, id, preset, set){
   if (readOnly) return;
   lastFocus = document.activeElement;
-  const doc = id ? find(col,id) : {...(col==='tasks'?{status:'planned',schedule:'deadline',owners:[]}:{}), ...(col==='assets'?{kind:'graphic',status:'미보고',due:'11.20',owner:''}:{}), ...(col==='prep'?{state:'미확인'}:{}), ...(preset||{})};
+  const doc = id ? find(col,id) : {...(col==='tasks'?{status:'planned',schedule:'deadline',owners:[]}:{}), ...(preset||{})};
   if (id && !doc) { toast('이 항목은 방금 삭제됐어요.'); return }
   const fkey = col==='meta' ? 'meta_'+set : col;
   const fields = F[fkey](doc);
@@ -1081,7 +1170,7 @@ async function saveModal(e){
 }
 async function doDelete(){
   const {col,id} = modal; const d = find(col,id);
-  try { await db.collection(col).doc(id).delete(); if (col === 'agenda') for (const l of linesOf(id)) await deleteLine(l.id); closeModal(); toast(`‘${(d&&(d.title||d.period))||'항목'}’을(를) 삭제했어요.`) } catch(e) { handleWriteError(e) }
+  try { await db.collection(col).doc(id).delete(); if (col === 'agenda') for (const l of linesOf(id)) await deleteLine(l.id); if (col === 'projects') for (const x of S.pitems.filter(o => o.proj === id)) await deletePitem(x.id); if (col === 'pitems') await syncLine(id, cur, true); closeModal(); toast(`‘${(d&&(d.title||d.period))||'항목'}’을(를) 삭제했어요.`) } catch(e) { handleWriteError(e) }
 }
 document.addEventListener('keydown', e => { if (e.key==='Escape' && $('modal-root').innerHTML) closeModal() });
 
@@ -1114,15 +1203,19 @@ document.addEventListener('click', e => {
   if (a==='view-me') { ui.viewPid = null; return renderMine() }
   if (a==='pick-me') return setMe(el.dataset.v);
   if (a==='mi-toggle') { const id = el.dataset.id; if (rpOpen.has(id)) rpOpen.delete(id); else rpOpen.add(id); renderMine(); const f = document.getElementById('mi-d-'+id); if (f && rpOpen.has(id)) f.focus({preventScroll:true}); return }
+  if (a==='proj-new') return openTemplatePicker();
+  if (a==='proj-toggle') { const id = el.dataset.id; if (pclosed.has(id)) pclosed.delete(id); else pclosed.add(id); try { localStorage.setItem('istar.meeting.pclosed', JSON.stringify([...pclosed])) } catch {} return renderProjects() }
+  if (a==='pi-add') return addPitem(el.dataset.id, el.dataset.sec);
+  if (a==='pi-del') { const x = find('pitems', el.dataset.id); if (x && !String(x.title||'').trim()) return deletePitem(x.id); if (el.classList.contains('armed')) return deletePitem(el.dataset.id); el.classList.add('armed'); el.textContent = '삭제'; setTimeout(() => { el.classList.remove('armed'); el.textContent = '✕' }, 2500); return }
+  if (a==='pk') { pfilt[el.dataset.id] = {...(pfilt[el.dataset.id] || {q: ''}), kind: el.dataset.v}; return renderProjects() }
   if (a==='al-add') return addLine(el.dataset.id);
   if (a==='al-del') { const l = find('alines', el.dataset.id); if (l && !String(l.text||'').trim()) return deleteLine(l.id); if (el.classList.contains('armed')) return deleteLine(el.dataset.id); el.classList.add('armed'); el.textContent = '삭제'; setTimeout(() => { el.classList.remove('armed'); el.textContent = '✕' }, 2500); return }
   if (a==='rp-tab') return setRp(el.dataset.v);
   if (a==='rp-toggle') { const id = el.dataset.id; if (rpOpen.has(id)) rpOpen.delete(id); else rpOpen.add(id); renderReports(); const f = document.getElementById('ri-d-'+id); if (f && rpOpen.has(id)) f.focus({preventScroll:true}); return }
-  if (a==='kind') { ui.kind = el.dataset.v; return mark('assets') }
   if (a==='cbrand') { ui.brand = el.dataset.v; return renderCalendar() }
   if (a==='cal-prev' || a==='cal-next') { const [y,m] = ui.month.split('-').map(Number); const d = new Date(Date.UTC(y, m-1 + (a==='cal-next'?1:-1), 1)); ui.month = d.toISOString().slice(0,7); return renderCalendar() }
   if (a==='cal-today') { ui.month = todayISO().slice(0,7); return renderCalendar() }
-  if (a==='export-assets') return save(`${cur}_L4K3_제작분담표.csv`, [['ID','구분','작업명','제작 내용','화면·음향','선행 확인','사용 시점','자료 마감','세부 담당','상태','예상 시간','메모','콘티 근거','납품 형태','제작 메모'], ...[...S.assets].sort(byOrder).map(x=>[x.code,KINDS[x.kind],x.title,x.brief,x.screen,x.need,x.cue,x.due,(AOWNERS.find(o=>o[0]===(x.owner||''))||[])[1],x.status,x.hours,x.memo,x.source,x.file,x.extra])]);
+  if (a==='proj-csv') { const pj = S.projects.find(x => x.id === el.dataset.id); if (!pj) return; const its = S.pitems.filter(x => x.proj === pj.id && secTypeOf(x) === 'production').sort(byOrder); return save(`${cur}_${pj.title.replace(/[\\/:*?"<>|]/g, '')}.csv`, [['ID','구분','작업명','제작 내용','화면·음향','선행 확인','사용 시점','자료 마감','세부 담당','상태','예상 시간','메모','근거','납품 형태','제작 메모'], ...its.map(x=>[x.code,KINDS[x.kind],x.title,x.brief,x.screen,x.need,x.cue,x.due,(AOWNERS.find(o=>o[0]===(x.owner||''))||[])[1],x.status,x.hours,x.memo,x.source,x.file,x.extra])]) }
   if (a==='export-reports') return save(`${cur}_담당자별_진행보고.csv`, [['담당자','보고 항목','상태','완료 범위','남은 작업','추가 소요일','완료 예정일','지원이 필요한 작업','지원 가능한 날짜·시간','기타 보고'], ...PORDER.flatMap(pid => { const q = PEOPLE[pid], rep = S.reports.find(r=>r.id===pid)||{}; return itemsOf(pid).map(r => [q.name+' '+q.role, r.title, r.status||'진행 전', r.done, r.left, r.days, r.eta, rep.help, rep.available, rep.notes]) })]);
 });
 
@@ -1137,8 +1230,8 @@ document.body.dataset.mode = mode;
 const myPid = () => (Object.entries(PEOPLE).find(([, p]) => p.name === myId) || [])[0] || null;
 function onMeChange(){ ui.viewPid = null; rpSeen.clear(); COLS.forEach(c => mark(c)); renderAppbar() }
 function placeShared(){
-  if (mode === 'meeting') { $('mm-slot').append($('agenda'), $('decide')) }
-  else { $('ph-agenda').after($('agenda')); $('ph-decide').after($('decide')) }
+  if (mode === 'meeting') { $('mm-slot').append($('agenda'), $('projects'), $('decide')) }
+  else { $('ph-agenda').after($('agenda')); $('ph-projects').after($('projects')); $('ph-decide').after($('decide')) }
 }
 function setMode(m, auto){
   if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
@@ -1171,7 +1264,7 @@ const ddColor = n => n <= 3 ? 'var(--bad)' : n <= 14 ? 'var(--warn)' : 'var(--mu
 function teamDues(days){
   const today = todayISO(), end = days ? addDays(today, days) : '9999-12-31', out = [];
   S.tasks.forEach(t => { if (t.status !== 'done' && ['deadline','milestone'].includes(t.schedule) && t.due && t.due >= today && t.due <= end) out.push({date: t.due, title: t.short || t.title, who: (t.owners || []).map(pname).join(' · ')}) });
-  S.alines.forEach(l => { const tx = String(l.text || '').trim(); if (l.due && !l.always && tx && l.due >= today && l.due <= end && !out.some(o => o.date === l.due && (o.title === tx || (pname(l.owner) && o.who.split(' · ').includes(pname(l.owner)))))) out.push({date: l.due, title: tx, who: l.owner === 'all' ? '전원' : (pname(l.owner) || '담당자 미정')}) });
+  [...S.alines, ...S.pitems.map(x => pitemLine(x.id)).filter(Boolean)].forEach(l => { const tx = String(l.text || '').trim(); if (l.due && !l.always && tx && l.due >= today && l.due <= end && !out.some(o => o.date === l.due && (o.title === tx || (pname(l.owner) && o.who.split(' · ').includes(pname(l.owner)))))) out.push({date: l.due, title: tx, who: l.owner === 'all' ? '전원' : (pname(l.owner) || '담당자 미정')}) });
   return out.sort((a, b) => a.date.localeCompare(b.date));
 }
 const dueRows = list => list.length ? list.map(x => { const n = dDay(x.date); return `<div class="dl"><span class="d">${md(x.date)}</span><span>${esc(x.title)}<span class="w">${esc(x.who)}</span></span><span class="dd" style="--c:${ddColor(n)}">${n === 0 ? 'D-DAY' : 'D-' + n}</span></div>` }).join('') : '<p class="edited">예정된 마감이 없어요.</p>';
@@ -1196,10 +1289,10 @@ function renderMine(){
   const cnt = s => items.filter(r => (r.status || '진행 전') === s).length;
   const head = `${pid !== me ? `<div class="viewing">${esc(p.name)} ${esc(p.role)}님 화면을 보고 있어요 ${me ? '<button class="btn ghost" type="button" data-act="view-me">내 화면으로</button>' : ''}</div>` : ''}<div class="v-head"><div><span class="sub">${esc(p.name)} ${esc(p.role)}님의 할 일</span><h1>${nToday || nMonth ? `오늘 마감 ${nToday}건, 이번 달 ${nMonth}건` : `남은 할 일 ${open.length}건`}</h1></div><div class="chips">${RST.map(s => `<span style="--c:${RST_C[s]}">${s} ${cnt(s)}</span>`).join('')}</div></div>`;
   const rows = items.map(r => { const st = r.status || '진행 전', k = `ritems|${esc(r.id)}|`;
-    const tag = r.lid ? `<span class="tagchip al2">회의안${r.src ? ' · ' + esc(r.src) : ''}</span>` : '';
+    const tag = r.lid ? `<span class="tagchip al2">${r.lkind === 'p' ? '프로젝트' : '회의안'}${r.src ? ' · ' + esc(r.src) : ''}</span>` : '';
     if (rpOpen.has(r.id)) return `<div class="ri open"><div class="mi-top">${dueChip(r)}<b>${esc(r.title)}</b>${tag}<select data-k="${k}status" aria-label="${esc(r.title)} 상태" style="color:${RST_C[st]}">${RST.map(x => `<option ${st === x ? 'selected' : ''}>${x}</option>`).join('')}</select><button class="btn ghost" data-edit data-act="edit" data-col="ritems" data-id="${esc(r.id)}">편집</button><button class="chev" data-act="mi-toggle" data-id="${esc(r.id)}" aria-expanded="true" aria-label="${esc(r.title)} 접기">${CHEV_UP}</button></div>
       <div class="ri-body"><div class="ri-grid"><label for="mi-d-${esc(r.id)}">완료 범위<textarea id="mi-d-${esc(r.id)}" rows="3" data-k="${k}done" placeholder="어디까지 끝났는지">${esc(r.done || '')}</textarea></label><label for="mi-l-${esc(r.id)}">남은 작업<textarea id="mi-l-${esc(r.id)}" rows="3" data-k="${k}left" placeholder="남은 일과 막힌 부분">${esc(r.left || '')}</textarea></label></div>
-      <div class="ri-meta">${r.lid ? `<span>데드라인 <b>${r.always ? '상시' : r.deadline ? md(r.deadline) : '없음'}</b> · 회의안에서 정해요</span>` : `<label>데드라인 <input type="date" data-k="${k}deadline" value="${esc(r.deadline || '')}" ${r.always ? 'disabled' : ''} aria-label="데드라인"></label><label><input type="checkbox" data-k="${k}always" ${r.always ? 'checked' : ''}> 상시</label>`}<label>추가 소요일 <input type="number" min="0" step="0.5" data-k="${k}days" value="${esc(r.days || '')}" placeholder="0" style="width:64px"> 일</label><label>완료 예정일 <input type="date" data-k="${k}eta" value="${esc(r.eta || '')}" aria-label="완료 예정일"></label>${editedLine(r)}</div></div></div>`;
+      <div class="ri-meta">${r.lid ? `<span>데드라인 <b>${r.always ? '상시' : r.deadline ? md(r.deadline) : '없음'}</b> · ${r.lkind === 'p' ? '프로젝트' : '회의안'}에서 정해요</span>` : `<label>데드라인 <input type="date" data-k="${k}deadline" value="${esc(r.deadline || '')}" ${r.always ? 'disabled' : ''} aria-label="데드라인"></label><label><input type="checkbox" data-k="${k}always" ${r.always ? 'checked' : ''}> 상시</label>`}<label>추가 소요일 <input type="number" min="0" step="0.5" data-k="${k}days" value="${esc(r.days || '')}" placeholder="0" style="width:64px"> 일</label><label>완료 예정일 <input type="date" data-k="${k}eta" value="${esc(r.eta || '')}" aria-label="완료 예정일"></label>${editedLine(r)}</div></div></div>`;
     const sum = r.left ? '남은 작업 · ' + firstLine(r.left) : r.done ? '완료 범위 · ' + firstLine(r.done) : '아직 적지 않았어요';
     return `<div class="ri"><button class="mi-row" type="button" data-act="mi-toggle" data-id="${esc(r.id)}" aria-expanded="false">${dueChip(r)}<span class="t"><span class="tt">${esc(r.title)}</span><small>${esc(sum)}</small></span>${tag || '<span></span>'}<span class="st" style="color:${RST_C[st]}">${st}</span>${CHEV_DN}</button></div>` }).join('');
   const legacy = rep.progress ? `<div class="legacy"><label for="mi-old-${pid}">기존 보고 내용<textarea id="mi-old-${pid}" rows="4" data-k="reports|${pid}|progress">${esc(rep.progress)}</textarea></label><p>한 칸에 적었던 내용이에요. 할 일별로 옮겨 적은 뒤 지우면 사라져요.</p></div>` : '';
@@ -1230,15 +1323,16 @@ function renderMeetings(){
   $('mt-delzone').innerHTML = ds.length > 1 && !readOnly ? '<button class="btn ghost danger" type="button" data-act="mt-ask-del">이 회의 삭제</button>' : '';
   syncNewBtn();
 }
-function syncNewBtn(){ const d = $('mt-date').value, has = MEETINGS.some(m=>m.id===d); $('mt-go').textContent = has ? '이 날짜 열기' : '+ 만들기'; $('mt-copy').closest('label').hidden = has }
+function syncNewBtn(){ const d = $('mt-date').value, has = MEETINGS.some(m=>m.id===d); $('mt-go').textContent = has ? '이 날짜 열기' : '+ 만들기'; $('mt-copy').closest('label').hidden = has; $('mt-copyp').closest('label').hidden = has || !$('mt-copy').checked }
 document.addEventListener('change', e => { if (e.target.classList && e.target.classList.contains('mt-sel') && e.target.value) openMeeting(e.target.value) });
 $('mt-date').addEventListener('input', syncNewBtn);
+$('mt-copy').addEventListener('change', syncNewBtn);
 $('mt-date').value = todayISO();
 $('mt-form').addEventListener('submit', async e => {
   e.preventDefault(); const d = $('mt-date').value; if (!/^\d{4}-\d{2}-\d{2}$/.test(d)) { toast('날짜를 골라 주세요.'); return }
   if (MEETINGS.some(m=>m.id===d)) return openMeeting(d);
   const btn = $('mt-go'); btn.disabled = true; btn.textContent = '만드는 중…';
-  try { await createMeeting(d, $('mt-copy').checked) } catch { toast('회의를 만들지 못했어요. 다시 시도해 주세요.') } finally { btn.disabled = false; syncNewBtn() }
+  try { await createMeeting(d, $('mt-copy').checked, $('mt-copy').checked && $('mt-copyp').checked) } catch { toast('회의를 만들지 못했어요. 다시 시도해 주세요.') } finally { btn.disabled = false; syncNewBtn() }
 });
 function openMeeting(d){
   if (!d || d === cur || !api) return;
@@ -1269,11 +1363,11 @@ function carry(col, d, date){
   if (col === 'reports') { x.help = ''; x.available = ''; x.notes = '' }
   return x;
 }
-async function createMeeting(date, copy){
+async function createMeeting(date, copy, withProjects){
   const ds = MEETINGS.map(m=>m.id).sort();
   const prev = ds.filter(x => x < date).pop() || ds[ds.length-1];
   let rows = [];
-  if (copy && prev) rows = (await api.fetchMeeting(prev)).map(r => ({col:r.col, id:r.id, data:carry(r.col, r.data, date)}));
+  if (copy && prev) rows = (await api.fetchMeeting(prev)).filter(r => withProjects || !['projects','pitems'].includes(r.col)).map(r => { const x = carry(r.col, r.data, date); if (!withProjects && r.col === 'ritems' && x.lkind === 'p') { x.lid = ''; x.proj = ''; x.lkind = ''; x.src = ''; x.deadline = x.deadline || '' } return {col:r.col, id:r.id, data:x} });
   if (!rows.some(r => r.col === 'meta')) rows.push({col:'meta', id:'main', data:{title:retitle('', date), dateLabel:dateLabelOf(date), subtitle:'', goal:''}});
   for (const pid of PORDER) if (!rows.some(r => r.col === 'reports' && r.id === pid)) rows.push({col:'reports', id:pid, data:{items:'', help:'', available:'', notes:''}});
   await api.putMeeting(date, rows, {createdAt: Date.now(), from: copy && prev ? prev : null, ...(myId?{createdBy:myId}:{})});
@@ -1348,7 +1442,32 @@ function makeDb(sb){
     doc: id => ref(c, id || (Date.now().toString(36) + Math.random().toString(36).slice(2, 8))),
     onSnapshot: (n, e) => { const entry = [n, e]; if (!subs.has(c)) subs.set(c, new Set()); subs.get(c).add(entry); want(c); return () => subs.get(c).delete(entry) }
   });
+  async function autoMigrate(){
+    try {
+      const {data: flag} = await sb.from('meeting_docs').select('id').eq('col','sys').eq('id','proj-migrated');
+      if (flag && flag.length) return;
+      const get = async col => (await sb.from('meeting_docs').select('id,data').eq('col', col)).data || [];
+      const {data: ms} = await sb.from('meeting_docs').select('id').eq('col','meetings');
+      for (const {id: m} of (ms || [])) {
+        const [assets, prep, roadmap, meta, projs] = await Promise.all([get('assets@'+m), get('prep@'+m), get('roadmap@'+m), get('meta@'+m), get('projects@'+m)]);
+        const note = ((meta.find(x => x.id === 'main') || {}).data) || {}, now = new Date().toISOString(), rows = [];
+        if (assets.length && !projs.some(x => x.id === 'p-live')) {
+          rows.push({col:'projects@'+m, id:'p-live', data:{template:'live', title:'L4K3 라방 제작 분담', order:1, note: note.assetsNote || '', secs:[{key:'items',type:'production',title:'제작·분담 리스트'},{key:'tasks',type:'tasks',title:'준비 일정'}], createdAt: Date.now()}, updated_at: now});
+          assets.forEach(a => rows.push({col:'pitems@'+m, id:'live-'+a.id, data:{...a.data, proj:'p-live', sec:'items'}, updated_at: now}));
+        }
+        if ((prep.length || roadmap.length) && !projs.some(x => x.id === 'p-tumblbug')) {
+          rows.push({col:'projects@'+m, id:'p-tumblbug', data:{template:'funding', title:'베일린 텀블벅 입점 준비', order:2, note: note.tumblbugNote || '', secs:[{key:'prep',type:'check',title:'준비 체크리스트'},{key:'roadmap',type:'timeline',title:'실행 로드맵'}], createdAt: Date.now()}, updated_at: now});
+          prep.forEach(x => rows.push({col:'pitems@'+m, id:'tb-'+x.id, data:{...x.data, proj:'p-tumblbug', sec:'prep'}, updated_at: now}));
+          roadmap.forEach(x => rows.push({col:'pitems@'+m, id:'tbr-'+x.id, data:{...x.data, proj:'p-tumblbug', sec:'roadmap'}, updated_at: now}));
+        }
+        for (let i = 0; i < rows.length; i += 200) { const {error} = await sb.from('meeting_docs').upsert(rows.slice(i, i+200), {onConflict:'col,id', ignoreDuplicates:true}); if (error) throw error }
+        rows.forEach(r => apply(r.col, r.id, r.data));
+      }
+      await sb.from('meeting_docs').upsert({col:'sys', id:'proj-migrated', data:{at: Date.now()}, updated_at: new Date().toISOString()});
+    } catch (e) { console.warn('project migration', e) }
+  }
   api = {
+    autoMigrate,
     fetchMeeting: async mt => { const cols = COLS.map(c => real(c, mt)); const {data, error} = await sb.from('meeting_docs').select('col,id,data').in('col', cols).limit(1000); if (error) throw error; return data.map(r => ({col: r.col.split('@')[0], id: r.id, data: r.data})) },
     putMeeting: async (mt, rows, info) => {
       const now = new Date().toISOString();
@@ -1371,6 +1490,7 @@ function makeDb(sb){
   const slow = setTimeout(() => { if (loaded.size < COLS.length) setLive('slow','연결 지연 · 최신이 아닐 수 있음') }, 10000);
   if (!window.supabase || !window.supabase.createClient) { clearTimeout(slow); setLive('off','연결 실패'); showBanner(); return }
   db = makeDb(window.supabase.createClient(SB_URL, SB_KEY, {auth:{persistSession:false}}));
+  api.autoMigrate();
   db.collection('meetings').onSnapshot(snap => { clearTimeout(slow); onMeetings(snap.docs.map(d => ({id:d.id, ...d.data()}))) }, () => { clearTimeout(slow); setLive('off','연결 실패'); showBanner() });
 })();
 function showBanner(){ dbOff = true; COLS.forEach(c=>mark(c)); const b=$('banner'); b.hidden=false; b.className='banner'; b.innerHTML='<strong>회의 내용을 불러오지 못했어요.</strong><br>인터넷 연결을 확인하고 새로고침해 주세요. 회사 네트워크에서 막혀 있다면 휴대폰 데이터로 열어 보세요.' }
